@@ -101,40 +101,23 @@ def make_game_record_list(game_record_str):
 
 def get_game_record_from_list(game_record_list):
     """
-    Function extracting game record in for of a list
-    from string
+    Function extracting game record from a list to make it
+    a list o tuples with a two values, number of move and coordinate
     """
 
     # Removing all statements from the list which aren't moves coordinates
     game_record_list_with_only_moves = []
-
+    counter = 1
     for i, v in enumerate(game_record_list):
         if i == 0 or i % 3 == 0:
-            print(i, v)
+            pass
         elif v == 'white' or v == 'black' or v == '--':
             pass
         else:
-            game_record_list_with_only_moves.append(v)
-    counter = 1
-    for i, v in enumerate(game_record_list_with_only_moves):
-        if i == 0 or i % 3 == 0:
-            game_record_list_with_only_moves.insert(i, counter)
+            game_record_list_with_only_moves.append((counter, v))
             counter += 1
 
-    # making a game record dictionary
-    game_record_dict = defaultdict(list)
-    for i, v in enumerate(game_record_list_with_only_moves):
-        try:
-            if i == 0 or i % 3 == 0:
-
-                game_record_dict[v] = [
-                    game_record_list_with_only_moves[i + 1],
-                    game_record_list_with_only_moves[i + 2]
-                ]
-        except IndexError:
-            game_record_dict[v] = [game_record_list[i + 1]]
-    print('lukam na dicta', game_record_dict)
-    return game_record_dict
+    return game_record_list_with_only_moves
 
 
 def get_data_about_color_swap(game_record_list):

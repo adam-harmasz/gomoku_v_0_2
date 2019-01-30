@@ -348,3 +348,5 @@ gomoku/media/
 .var_envs
 
 core/record_1
+
+scratch.py
