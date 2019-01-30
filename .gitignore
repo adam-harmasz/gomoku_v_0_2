@@ -346,3 +346,5 @@ gomoku/media/
 *.idea/vcs.xml
 
 .var_envs
+
+core/record_1

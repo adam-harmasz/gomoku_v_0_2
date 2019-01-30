@@ -26,17 +26,20 @@ class Profile(models.Model):
 
 
 class Player(models.Model):
+    """Class defining player object"""
     nickname = models.CharField(max_length=255)
     win = models.IntegerField()
     loss = models.IntegerField()
 
 
-
-class Gomoku_record(models.Model):
+class GomokuRecord(models.Model):
+    """Class defining gomoku record object"""
     record = models.CharField(max_length=255)
     game_date = models.DateTimeField()
     black_player = models.ForeignKey('Player')
     white_player = models.ForeignKey('Player')
     result = models.IntegerField()
+    swap = models.BooleanField()
+    swap_2 = models.BooleanField()
 
 
