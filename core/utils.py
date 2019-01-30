@@ -40,17 +40,22 @@ def extract_data_from_game_record_file(filename):
             result_regex,
             f_content).group()
 
-        get_data_from_str_generator(black_player_nickname_str,
-                          white_player_nickname_str,
-                          result_str)
         payload = defaultdict(list)
+        game_record_list = make_game_record_list(game_record_string)
+        data_list_about_color_swap = get_data_about_color_swap(game_record_list)
+        # Adding keys and values to the dictionary
         payload['date_time'] = get_date_data_from_str(time_str, date_str)
+        payload['game_record'] = get_game_record_from_list(game_record_list)
+        payload['swap'] = data_list_about_color_swap[0]
+        payload['swap_2'] = data_list_about_color_swap[1]
+        payload['color_change'] = data_list_about_color_swap[2]
+
         for _ in get_data_from_str_generator(
                             black_player_nickname_str,
                             white_player_nickname_str,
                             result_str):
-            payload[_[0]].append(_[1])
-        print(get_game_record_from_str(game_record_string))
+            payload[_[0]] = _[1]
+            make_game_record_list(game_record_string)
 
         return payload
 
@@ -81,28 +86,74 @@ def get_data_from_str_generator(*data_list_params):
     return (data_str.lower().split(' "') for data_str in data_list_params)
 
 
-def get_game_record_from_str(game_record_str):
-    """
-    Function extracting game record in for of a list
-    from string
-    """
-    game_record_list = ' '.join(game_record_str.split('\n')).split(' ')
+def make_game_record_list(game_record_str):
+    """Function making game record list from the string"""
+    game_record_list = ' '.join(game_record_str.split('\n')).split (' ')
     game_record_list.remove('')
     # removing . which was attached to numbers
     for i, v in enumerate(game_record_list):
         if '.' in v:
-            v = v.rstrip('.')
-            game_record_list[i] = v
+            v = v.rstrip ('.')
+            game_record_list[i] = int(v)
 
-    # making a dictionary with game record
-    try:
-        game_record_dict = defaultdict(list)
-        for i, v in enumerate(game_record_list):
+    return game_record_list
+
+
+def get_game_record_from_list(game_record_list):
+    """
+    Function extracting game record in for of a list
+    from string
+    """
+
+    # Removing all statements from the list which aren't moves coordinates
+    game_record_list_with_only_moves = []
+
+    for i, v in enumerate(game_record_list):
+        if i == 0 or i % 3 == 0:
+            print(i, v)
+        elif v == 'white' or v == 'black' or v == '--':
+            pass
+        else:
+            game_record_list_with_only_moves.append(v)
+    counter = 1
+    for i, v in enumerate(game_record_list_with_only_moves):
+        if i == 0 or i % 3 == 0:
+            game_record_list_with_only_moves.insert(i, counter)
+            counter += 1
+
+    # making a game record dictionary
+    game_record_dict = defaultdict(list)
+    for i, v in enumerate(game_record_list_with_only_moves):
+        try:
             if i == 0 or i % 3 == 0:
-                game_record_dict[v] = [game_record_list[i + 1], game_record_list[i + 2]]
-    except IndexError:
-        game_record_dict[v] = [game_record_list[i + 1]]
+
+                game_record_dict[v] = [
+                    game_record_list_with_only_moves[i + 1],
+                    game_record_list_with_only_moves[i + 2]
+                ]
+        except IndexError:
+            game_record_dict[v] = [game_record_list[i + 1]]
+    print('lukam na dicta', game_record_dict)
     return game_record_dict
+
+
+def get_data_about_color_swap(game_record_list):
+    """
+    Function determining whether during the game swap or swap2 was used
+    and if players changed their original color of the stones
+    """
+    swap = False
+    swap_2 = False
+    color_change = False
+    if 'white' in game_record_list or 'black' in game_record_list:
+        swap = True
+    if game_record_list[5] == 'black':
+        color_change = True
+    elif game_record_list[10] == 'white' or game_record_list[10] == 'black':
+        swap_2 = True
+        if game_record_list[10] == 'white':
+            color_change = True
+    return [swap, swap_2, color_change]
 
 
 print(extract_data_from_game_record_file('record_1'))

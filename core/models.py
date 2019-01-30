@@ -41,5 +41,6 @@ class GomokuRecord(models.Model):
     result = models.IntegerField()
     swap = models.BooleanField()
     swap_2 = models.BooleanField()
+    color_change = models.BooleanField()
 
 
