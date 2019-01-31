@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'core',
     'accounts',
     'gomoku_app',
+    'players',
+    'gomoku_file_app',
 
     'django.contrib.admin',
     'django.contrib.auth',

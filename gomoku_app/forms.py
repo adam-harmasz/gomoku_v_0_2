@@ -4,7 +4,15 @@ from core import models
 from . import views
 
 
-class GomokuRecordForm(forms.ModelForm):
+# class GomokuRecordForm(forms.ModelForm):
+#     """Form to upload gomoku record file"""
+#
+#     class Meta:
+#         model = models.GomokuRecordFile
+#         fields = ('game_record_file',)
+#         widgets = {'game_record_file': forms.FileInput()}
 
-    class Meta:
-        model = models.GomokuRecord
+
+class GomokuRecordForm(forms.Form):
+    """Form to upload game record file"""
+    file = forms.FileField(widget=forms.FileInput())

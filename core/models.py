@@ -8,6 +8,8 @@ from django.contrib.auth.models import (
 )
 
 from django.conf import settings
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 from django.urls import reverse_lazy
 
 
@@ -17,6 +19,7 @@ def profile_image_file_path(instance, filename):
     filename = f'{uuid.uuid4()}.{ext}'
 
     return os.path.join('uploads/accounts/', filename)
+
 
 def gomoku_record_image_file_path(instance, filename):
     """Generate file path for new recipe image"""
@@ -78,9 +81,26 @@ class GomokuRecord(models.Model):
         return f'{self.black_player} - {self.white_player}'
 
 
-    class GomokuRecordFile(models.Model):
-        game_record_file = models.FileField(null=True, upload_to=gomoku_record_image_file_path)
-        game_record_data = models.TextField()
+class GomokuRecordFile(models.Model):
+    """Class defining GomokuRecordFiles objects"""
+    game_record_file = models.FileField(
+        null=True,
+        upload_to=gomoku_record_image_file_path
+    )
+    # file_path = models.CharField(max_length=255, default=None, null=True)
+
+
+# @receiver(post_save, sender=GomokuRecordFile)
+# def create_gomoku_record_object_profile(sender, instance, created, **kwargs):
+#     if created:
+#         # Parent.objects.create(name_of_parent=instance)
+#         pass
+#
+#
+# @receiver(post_save, sender=GomokuRecordFile)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.parent.save()
+
 
 
 

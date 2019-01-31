@@ -1,7 +1,9 @@
 from rest_framework import routers
 
-from accounts.api import views
+from accounts.api import views as accounts_views
+from gomoku_file_app.gomoku_file_app_api import views as file_views
 
 
 router = routers.DefaultRouter()
-router.register(r'profiles', views.UserViewset)
+router.register(r'profiles', accounts_views.UserViewset)
+router.register(r'files', file_views.GomokuRecordImageViewset)

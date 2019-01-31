@@ -138,7 +138,3 @@ def get_data_about_color_swap(game_record_list):
         if game_record_list[10] == 'white':
             color_change = True
     return [swap, swap_2, color_change]
-
-
-print(extract_data_from_game_record_file('record_1'))
-
