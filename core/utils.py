@@ -43,6 +43,7 @@ def extract_data_from_game_record_file(filename):
         payload = defaultdict(list)
         game_record_list = make_game_record_list(game_record_string)
         data_list_about_color_swap = get_data_about_color_swap(game_record_list)
+
         # Adding keys and values to the dictionary
         payload['date_time'] = get_date_data_from_str(time_str, date_str)
         payload['game_record'] = get_game_record_from_list(game_record_list)
