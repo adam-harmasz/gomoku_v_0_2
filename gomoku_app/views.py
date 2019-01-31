@@ -1,3 +1,14 @@
-from django.shortcuts import render
+from django.views import View
 
-# Create your views here.
+from . import forms
+
+
+class ExtractDataRedirectView(View):
+    """
+    View which will unpack data from gomoku
+    record file and pass it to serializer
+    """
+    pass
+
+
+

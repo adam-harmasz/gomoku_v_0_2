@@ -11,7 +11,14 @@ from django.conf import settings
 from django.urls import reverse_lazy
 
 
-def recipe_image_file_path(instance, filename):
+def profile_image_file_path(instance, filename):
+    """Generate file path for new recipe image"""
+    ext = filename.split('.')[-1]
+    filename = f'{uuid.uuid4()}.{ext}'
+
+    return os.path.join('uploads/accounts/', filename)
+
+def gomoku_record_image_file_path(instance, filename):
     """Generate file path for new recipe image"""
     ext = filename.split('.')[-1]
     filename = f'{uuid.uuid4()}.{ext}'
@@ -25,7 +32,7 @@ class Profile(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
-    picture = models.ImageField(null=True, upload_to=recipe_image_file_path)
+    picture = models.ImageField(null=True, upload_to=profile_image_file_path)
 
     def __str__(self):
         return self.user
@@ -50,7 +57,7 @@ class Player(models.Model):
 class GomokuRecord(models.Model):
     """Class defining gomoku record object"""
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE)
-    record = models.CharField(max_length=255)
+    game_record = models.TextField()
     game_date = models.DateTimeField()
     black_player = models.ForeignKey(
         'Player',
@@ -69,6 +76,11 @@ class GomokuRecord(models.Model):
 
     def __str__(self):
         return f'{self.black_player} - {self.white_player}'
+
+
+    class GomokuRecordFile(models.Model):
+        game_record_file = models.FileField(null=True, upload_to=gomoku_record_image_file_path)
+        game_record_data = models.TextField()
 
 
 
