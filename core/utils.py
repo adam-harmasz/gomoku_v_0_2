@@ -42,20 +42,27 @@ def extract_data_from_game_record_file(filename):
 
         payload = defaultdict(list)
         game_record_list = make_game_record_list(game_record_string)
-        data_list_about_color_swap = get_data_about_color_swap(game_record_list)
+        swap_and_color_data = get_data_about_color_swap(game_record_list)
 
         # Adding keys and values to the dictionary
         payload['date_time'] = get_date_data_from_str(time_str, date_str)
         payload['game_record'] = get_game_record_from_list(game_record_list)
-        payload['swap'] = data_list_about_color_swap[0]
-        payload['swap_2'] = data_list_about_color_swap[1]
-        payload['color_change'] = data_list_about_color_swap[2]
+        payload['swap'] = swap_and_color_data[0]
+        payload['swap_2'] = swap_and_color_data[1]
+        payload['color_change'] = swap_and_color_data[2]
 
         for _ in get_data_from_str_generator(
                             black_player_nickname_str,
                             white_player_nickname_str,
                             result_str):
-            payload[_[0]] = _[1]
+            if _[0] == 'result' and _[1] == '1-0':
+                payload[_[0]] = 'black'
+            elif _[0] == 'result' and _[1] == '0-1':
+                payload[_[0]] = 'white'
+            elif _[0] == 'result' and _[1] == '1/2-1/2':
+                payload[_[0]] = 'draw'
+            else:
+                payload[_[0]] = _[1]
             make_game_record_list(game_record_string)
 
         return payload

@@ -7,6 +7,7 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 
+from django.shortcuts import get_object_or_404
 from django.conf import settings
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
@@ -54,7 +55,7 @@ class Profile(models.Model):
 
 class Player(models.Model):
     """Class defining player object"""
-    nickname = models.CharField(max_length=255)
+    nickname = models.CharField(max_length=255, unique=True)
     win = models.IntegerField(blank=True, null=True)
     loss = models.IntegerField(blank=True, null=True)
 
@@ -77,7 +78,7 @@ class GomokuRecord(models.Model):
         on_delete=models.CASCADE,
         related_name='white_player'
     )
-    result = models.IntegerField()
+    result = models.CharField(max_length=50)
     swap = models.BooleanField()
     swap_2 = models.BooleanField()
     color_change = models.BooleanField()
@@ -108,21 +109,28 @@ def create_gomoku_record_object_profile(sender, instance, created, **kwargs):
         payload = extract_data_from_game_record_file(
             f'config/media/{instance.game_record_file}'
         )
-        Player.objects.create(nickname=instance)
-        white_player = Player.objects.get_or_create(nickname=payload['white'])
-        black_player = Player.objects.get_or_create(nickname=payload['black'])
+        Player.objects.get_or_create(
+            nickname=payload['white'],
+        )
+        Player.objects.get_or_create(
+            nickname=payload['black'],
+        )
+        white_player = Player.objects.get(nickname=payload['white'])
+        black_player = Player.objects.get(nickname=payload['black'])
+
         print(white_player, black_player)
-        # GomokuRecord.objects.create(
-        #     profile=get_user_model().objects.get(username=instance.profile),
-        #     game_record=payload['game_record'],
-        #     game_date=payload['date_time'],
-        #     result=payload['result'],
-        #     swap=payload['swap'],
-        #     swap_2=payload['swap2'],
-        #     color_change=payload['color_change'],
-        #     black_player=black_player,
-        #     white_player=white_player,
-        # )
+        GomokuRecord.objects.create(
+            profile=get_user_model().objects.get(username=instance.profile),
+            game_record=payload['game_record'],
+            game_date=payload['date_time'],
+            result=payload['result'],
+            swap=payload['swap'],
+            swap_2=payload['swap_2'],
+            color_change=payload['color_change'],
+            black_player=black_player,
+            white_player=white_player,
+        )
+
 #
 # @receiver(post_save, sender=GomokuRecordFile)
 # def save_user_profile(sender, instance, **kwargs):
