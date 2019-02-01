@@ -89,6 +89,6 @@ class GomokuRecordFile(models.Model):
         return f'game record owned by: {self.profile}'
 
 
+# Signals to create gomoku record and update players data
 post_save.connect(create_gomoku_record_object, sender=GomokuRecordFile)
-
 post_save.connect(update_player_stats, sender=GomokuRecord)
