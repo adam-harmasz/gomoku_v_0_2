@@ -46,18 +46,12 @@ class Profile(models.Model):
     def __str__(self):
         return self.user
 
-    # def get_absolute_url(self, request):
-    #     return reverse_lazy(
-    #         'profiles:detail',
-    #         kwargs={'username': self.user.username}
-    #     )
-
 
 class Player(models.Model):
     """Class defining player object"""
     nickname = models.CharField(max_length=255, unique=True)
-    win = models.IntegerField(blank=True, null=True)
-    loss = models.IntegerField(blank=True, null=True)
+    win = models.FloatField(default=0, blank=True, null=True)
+    loss = models.FloatField(default=0, blank=True, null=True)
 
     def __str__(self):
         return self.nickname
@@ -94,14 +88,13 @@ class GomokuRecordFile(models.Model):
         null=True,
         upload_to=gomoku_record_image_file_path
     )
-    # file_path = models.CharField(max_length=255, default=None, null=True)
 
     def __str__(self):
         return f'game record owned by: {self.profile}'
 
 
 @receiver(post_save, sender=GomokuRecordFile)
-def create_gomoku_record_object_profile(sender, instance, created, **kwargs):
+def create_gomoku_record_object(sender, instance, created, **kwargs):
     """
     Signal to create players and game record object after file is uploaded
     """
@@ -118,11 +111,10 @@ def create_gomoku_record_object_profile(sender, instance, created, **kwargs):
         white_player = Player.objects.get(nickname=payload['white'])
         black_player = Player.objects.get(nickname=payload['black'])
 
-        print(white_player, black_player)
         GomokuRecord.objects.create(
             profile=get_user_model().objects.get(username=instance.profile),
             game_record=payload['game_record'],
-            game_date=payload['date_time'],
+            game_date=payload['game_date'],
             result=payload['result'],
             swap=payload['swap'],
             swap_2=payload['swap_2'],
@@ -131,10 +123,31 @@ def create_gomoku_record_object_profile(sender, instance, created, **kwargs):
             white_player=white_player,
         )
 
-#
-# @receiver(post_save, sender=GomokuRecordFile)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.parent.save()
+
+@receiver(post_save, sender=GomokuRecord)
+def update_player_stats(sender, instance, created, **kwargs):
+    """Signal to update player win/loss"""
+    if created:
+        black_player = Player.objects.get(nickname=instance.black_player)
+        white_player = Player.objects.get(nickname=instance.white_player)
+        result = instance.result
+        if result == 'black':
+            black_player.win += 1
+            white_player.loss += 1
+            black_player.save()
+            white_player.save()
+        elif result == 'white':
+            black_player.loss += 1
+            white_player.win += 1
+            black_player.save()
+            white_player.save()
+        elif result == 'draw':
+            black_player.win += 0.5
+            white_player.win += 0.5
+            black_player.save()
+            white_player.save()
+        else:
+            raise ValueError('wrong data in instance.result')
 
 
 

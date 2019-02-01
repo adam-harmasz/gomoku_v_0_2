@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.views import View
 
@@ -32,6 +32,6 @@ class ExtractDataRedirectView(LoginRequiredMixin, View):
                 profile=user
             )
             # gomoku_file.save()
-        return HttpResponse('dupa')
+        return HttpResponseRedirect('/api/')
 
 

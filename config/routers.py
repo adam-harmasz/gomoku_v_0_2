@@ -1,7 +1,7 @@
 from rest_framework import routers
 
 from accounts.api import views as accounts_views
-from gomoku_file_app.gomoku_file_app_api import views as file_views
+from gomoku_file_app.api import views as file_views
 
 
 router = routers.DefaultRouter()

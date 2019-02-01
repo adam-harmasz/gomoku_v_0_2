@@ -45,7 +45,7 @@ def extract_data_from_game_record_file(filename):
         swap_and_color_data = get_data_about_color_swap(game_record_list)
 
         # Adding keys and values to the dictionary
-        payload['date_time'] = get_date_data_from_str(time_str, date_str)
+        payload['game_date'] = get_date_data_from_str(time_str, date_str)
         payload['game_record'] = get_game_record_from_list(game_record_list)
         payload['swap'] = swap_and_color_data[0]
         payload['swap_2'] = swap_and_color_data[1]

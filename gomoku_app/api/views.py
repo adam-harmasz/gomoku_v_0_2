@@ -13,5 +13,3 @@ class GomokuRecordViewset(viewsets.ModelViewSet):
     queryset = models.GomokuRecord.objects.all()
     serializer_class = serializers.GomokuRecordFileSerializer
 
-    def perform_create(self, serializer):
-        pass
