@@ -14,4 +14,3 @@ class GomokuRecordViewset(viewsets.ModelViewSet):
     queryset = models.GomokuRecord.objects.all()
     serializer_class = serializers.GomokuRecordSerializer
     permission_classes = [permissions.IsAuthenticated]
-

@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -14,13 +14,13 @@ User = get_user_model()
 
 class GomokuRecordImageViewset(viewsets.ModelViewSet):
     """Viewset to handle uploading file with game record"""
-
     serializer_class = serializers.GomokuRecordFileSerializer
     queryset = models.GomokuRecordFile.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
 
     @action(methods=['POST'], detail=True, url_path='upload-image')
     def upload_image(self, request, pk=None):
-        """Upload an image to a recipe"""
+        """Upload an game record file"""
         gomoku_record = self.get_object()
         serializer = self.get_serializer(
             gomoku_record,
