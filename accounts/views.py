@@ -32,7 +32,6 @@ class RegisterView(View):
     def post(self, request):
         """function handling POST method"""
         form = UserRegisterForm(request.POST)
-        print('DUPA DEBUG MODE', form)
         if form.is_valid():
             print('asd')
             form.save()
