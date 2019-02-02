@@ -171,5 +171,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_REDIRECT_URL = '/api'
 
-LOGOUT_REDIRECT_URL = '/accounts/login'
+LOGIN_URL = '/accounts/login'
+
+# LOGOUT_REDIRECT_URL = '/accounts/login'
 
