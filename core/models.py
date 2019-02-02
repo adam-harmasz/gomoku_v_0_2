@@ -11,7 +11,6 @@ from django.db.models.signals import post_save
 
 from core.signals import create_gomoku_record_object, update_player_stats
 
-
 User = settings.AUTH_USER_MODEL
 
 

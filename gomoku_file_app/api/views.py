@@ -20,7 +20,7 @@ class GomokuRecordImageViewset(viewsets.ModelViewSet):
 
     @action(methods=['POST'], detail=True, url_path='upload-image')
     def upload_image(self, request, pk=None):
-        """Upload an game record file"""
+        """Upload a game record file"""
         gomoku_record = self.get_object()
         serializer = self.get_serializer(
             gomoku_record,

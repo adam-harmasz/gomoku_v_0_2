@@ -22,6 +22,7 @@ def get_env_variable(var_name):
         error_msg = 'Set the {} environment variable'.format(var_name)
         raise ImproperlyConfigured(error_msg)
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -41,11 +42,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'core',
-    'accounts',
-    'gomoku_app',
-    'players',
-    'gomoku_file_app',
+    'core.apps.CoreConfig',
+    'accounts.apps.AccountsConfig',
+    'gomoku_app.apps.GomokuAppConfig',
+    'players.apps.PlayersConfig',
+    'gomoku_file_app.apps.GomokuFileAppConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_extensions',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -164,3 +166,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
 }
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_REDIRECT_URL = '/api'
+
+LOGOUT_REDIRECT_URL = '/login'
+
