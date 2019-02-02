@@ -42,11 +42,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'core.apps.CoreConfig',
-    'accounts.apps.AccountsConfig',
-    'gomoku_app.apps.GomokuAppConfig',
-    'players.apps.PlayersConfig',
-    'gomoku_file_app.apps.GomokuFileAppConfig',
+    'core',
+    'accounts',
+    'gomoku_app',
+    'players',
+    'gomoku_file_app',
 
     'django.contrib.admin',
     'django.contrib.auth',

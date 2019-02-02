@@ -36,3 +36,12 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
 
         return user
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    """Serializer for the profile objects"""
+
+    class Meta:
+        model = models.UserProfile
+        fields = ('id', 'user', 'picture')
+        read_only_fields = ('id',)

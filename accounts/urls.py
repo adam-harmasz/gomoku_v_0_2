@@ -24,4 +24,5 @@ urlpatterns = [
          views.UserProfileView.as_view(),
          name='profile-detail'
     ),
+
 ]

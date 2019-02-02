@@ -13,5 +13,5 @@ class GomokuRecordFileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.GomokuRecordFile
-        fields = ('id', 'gomoku_record_file')
+        fields = ('id', 'game_record_file')
         read_only_fields = ('id',)
