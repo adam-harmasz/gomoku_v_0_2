@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
     """Serializer for the users objects"""
     password = serializers.CharField(
         write_only=True,
-        min_length=5,
+        min_length=8,
         required=True,
         help_text='password needs to be at least 5 ',
         style={'input_type': 'password', 'placeholder': 'Password'}

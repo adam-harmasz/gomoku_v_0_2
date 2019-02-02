@@ -32,14 +32,14 @@ def gomoku_record_image_file_path(instance, filename):
 
 class Profile(models.Model):
     """Class defining User object linked to profile by one-to-one"""
-    user = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    picture = models.ImageField(
+        default='default.jpg',
+        upload_to=profile_image_file_path
     )
-    picture = models.ImageField(null=True, upload_to=profile_image_file_path)
 
     def __str__(self):
-        return self.user
+        return self.user.username
 
 
 class Player(models.Model):
