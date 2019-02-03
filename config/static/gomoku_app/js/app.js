@@ -1,8 +1,8 @@
 $(document).ready(function () {
     var turn = 'O',
-        move = 1;
+        move = 0;
         game_record_list = game_record.slice(1, -1).split(', ');
-        console.log(game_record_list, swap, swap_2, color_change);
+        console.log(color_change);
         console.log(typeof game_record_list);
 
     // this function will make gomoku board
@@ -99,79 +99,108 @@ $(document).ready(function () {
     // adding next move from the game record after mouse click
     function add_next_move(data) {
         var next_btn = $("#next");
-            console.log('asdasdasdasdasdasd', '#'.concat(game_record_list[move - 1].slice(1, -1)));
+            console.log(move);
             next_btn.on('click', function (event) {
-            event.preventDefault();
-            turn = turn === 'O' ? 'X' : 'O';
+                event.preventDefault();
+                turn = turn === 'O' ? 'X' : 'O';
+                if (move <= game_record_list.length) {
+                    if (turn === 'O') {
+                        $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'white');
+                        console.log("asdasd", move);
+                        move += 1;
+                        if (move === 1) {
+                            undo_move();
+                        } else if (move >= game_record_list.length) {
+                            silenceNext();
+                        }
+                    } else {
+                        $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'black');
+                        console.log(move);
+                        move += 1;
+                        if (move === 1) {
+                            undo_move();
+                        } else if (move >= game_record_list.length) {
+                            silenceNext();
+                        }
+                    }
 
-            if (turn === 'O') {
-                $('#'.concat(game_record_list[move - 1].slice(1, -1))).css('fill', 'white');
-                console.log("asdasd", move);
-                move += 1;
-            } else {
-                $('#'.concat(game_record_list[move - 1].slice(1, -1))).css('fill', 'black');
-                console.log(move);
-                move += 1;
-            }
-        });
+                }
 
-        // var gomoku_board_coordinates = $(".inner-intersection"),
-        //     turn = turn === 'O' ? 'X' : 'O',
-        //     next_btn = $("#next");
-        //
-        // $.each(gomoku_board_coordinates, function (i, val) {
-        //     var circle_elem = $(val).find("circle"),
-        //
-        //     next_btn.click(function () {
-        //         event.preventDefault();
-        //         if (turn === 'O') {
-        //             circle_elem.css("fill", "white");
-        //             console.log('jestem tu white');
-        //             move += 1;
-        //         } else {
-        //             circle_elem.css("fill", "black");
-        //             console.log('jestem tu black');
-        //             move += 1;
-        //         }
-        //     });
-        //     console.log($(val).find("text"));
-        // });
-
-
-
+            })
     }
     // undo move on board according to game record
-        function add_prev_move() {
-            var prev_btn = $('.next');
-
-            prev_btn.on('click', function (event) {
+    function undo_move() {
+        var undo_btn = $('#undo');
+            console.log(move);
+            undo_btn.on('click', function (event) {
                 event.preventDefault();
-                console.log(move + " który ruch");
                 turn = turn === 'O' ? 'X' : 'O';
-                console.log(context[move][0] + context[move][1]);
-                console.log(move + 'KTÓRY RUCH');
-                if (turn === 'O') {
-                    $('.' + context[move][0] + '.' + context[move][1] + '').html($('<img src="' + white_src + '">'));
-                    move += 1;
-                    if (move === 1) {
-                        prevMove();
-                    } else if (move >= context.length) {
-                        silenceNext();
-                    }
-                } else {
-                    $('.' + context[move][0] + '.' + context[move][1] + '').html($('<img src="' + black_src + '">'));
-                    move += 1;
-                    if (move === 1) {
-                        prevMove();
-                    } else if (move >= context.length) {
-                        silenceNext();
-                    }
+
+                if (move === game_record_list.length) {
+                    silenceNext();
+                    add_next_move();
+                }
+                move -= 1;
+                $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'transparent');
+                    console.log("asdasd", move);
+                if (move === 0) {
+                    silenceUndo();
                 }
             })
+    }
+
+    // show all moves at once
+        function lastMove() {
+            var last_button = $('#end');
+
+            last_button.on('click', function (event) {
+                event.preventDefault();
+                turn = 'O';
+                move = 0;
+                for (var i = 0; i < game_record_list.length; i++){
+                    turn = turn === 'O' ? 'X' : 'O';
+                    if (turn === 'O') {
+                        $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'white');
+                        move += 1;
+                    } else {
+                        $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'black');
+                        move += 1;
+                    }
+                }
+                console.log(move + "  który mamy ruch");
+                silenceUndo();
+                undo_move();
+                silenceNext();
+                silenceLast();
+            });
         }
 
-    gomoku_board_factory();
-    coordinates_hoover_event();
-    add_next_move();
+    // function enabling events
+    function initGame() {
+        var start = $('#start');
+        move = 0;
+        start.one('click', function (event) {
+            event.preventDefault();
+            add_next_move();
+            coordinates_hoover_event();
+            console.log('start!');
+        })
+    }
 
+    // function removing click event from next button
+    function silenceNext() {
+        $('#next').off('click');
+    }
+
+        // function removing click event from next button
+    function silenceUndo() {
+        $('#undo').off('click');
+    }
+
+    function silenceLast() {
+        $('#end').off('click');
+    }
+
+    initGame();
+    gomoku_board_factory();
 });
