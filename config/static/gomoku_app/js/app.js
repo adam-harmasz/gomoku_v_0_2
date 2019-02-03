@@ -9,7 +9,7 @@ $(document).ready(function () {
     function gomoku_board_factory(data) {
         var gomoku_board = $(".gomoku-board"),
             intersection_container = $(".intersection_container"),
-            coordinates_letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'],
+            coordinates_letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o'],
             coordinate_x,
             coordinate_y,
             rect_y = 4.5,
@@ -39,6 +39,8 @@ $(document).ready(function () {
                     cx: rect_x_intersection + 20,
                     r: 20,
                     class: "board-cell-intersection-circle",
+                    id: "" + coordinate_x + coordinate_y + "",
+
                 });
 
                 // creating text which is hidden in default (transparent fill), fill will be change when mouse on
@@ -94,34 +96,55 @@ $(document).ready(function () {
         });
     };
 
-    // adding stones after mouse click
+    // adding next move from the game record after mouse click
     function add_next_move(data) {
-        var circles = $(".next");
-
-            circles.on('click', function (event) {
+        var next_btn = $("#next");
+            console.log('asdasdasdasdasdasd', '#'.concat(game_record_list[move - 1].slice(1, -1)));
+            next_btn.on('click', function (event) {
             event.preventDefault();
             turn = turn === 'O' ? 'X' : 'O';
 
-            var _this = $(this);
             if (turn === 'O') {
-                _this.css('fill', 'white');
-                console.log('THIS WHITE  ', _this);
-                console.log(move);
+                $('#'.concat(game_record_list[move - 1].slice(1, -1))).css('fill', 'white');
+                console.log("asdasd", move);
                 move += 1;
             } else {
-                _this.css('fill', 'black');
-                console.log('THIS   ',_this);
+                $('#'.concat(game_record_list[move - 1].slice(1, -1))).css('fill', 'black');
                 console.log(move);
                 move += 1;
             }
         });
 
-    }
-    // Adding move on board from game record which is imported from Django back-end as context
-        function add_prev_move() {
-            var next_btn = $('.next');
+        // var gomoku_board_coordinates = $(".inner-intersection"),
+        //     turn = turn === 'O' ? 'X' : 'O',
+        //     next_btn = $("#next");
+        //
+        // $.each(gomoku_board_coordinates, function (i, val) {
+        //     var circle_elem = $(val).find("circle"),
+        //
+        //     next_btn.click(function () {
+        //         event.preventDefault();
+        //         if (turn === 'O') {
+        //             circle_elem.css("fill", "white");
+        //             console.log('jestem tu white');
+        //             move += 1;
+        //         } else {
+        //             circle_elem.css("fill", "black");
+        //             console.log('jestem tu black');
+        //             move += 1;
+        //         }
+        //     });
+        //     console.log($(val).find("text"));
+        // });
 
-            next_btn.on('click', function (event) {
+
+
+    }
+    // undo move on board according to game record
+        function add_prev_move() {
+            var prev_btn = $('.next');
+
+            prev_btn.on('click', function (event) {
                 event.preventDefault();
                 console.log(move + " który ruch");
                 turn = turn === 'O' ? 'X' : 'O';
@@ -149,6 +172,6 @@ $(document).ready(function () {
 
     gomoku_board_factory();
     coordinates_hoover_event();
-    // add_next_move();
+    add_next_move();
 
 });
