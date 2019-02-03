@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
+from django.views.generic import DetailView, ListView
 
 from core import models
 from . import forms
@@ -30,6 +31,20 @@ class ExtractDataRedirectView(LoginRequiredMixin, View):
                 game_record_file=files,
                 profile=user
             )
-        return HttpResponseRedirect('/api/')
+        return HttpResponseRedirect('/home/')
+
+
+class GameRecordListView(LoginRequiredMixin, ListView):
+    """View displaying list of gomoku games"""
+    queryset = models.GomokuRecord.objects.all()
+    template_name = 'gomoku_app/game_list.html'
+
+
+class GameRecordDetailView(LoginRequiredMixin, DetailView):
+    """View displaying list of gomoku games"""
+    queryset = models.GomokuRecord.objects.all()
+    template_name = 'gomoku_app/game_detail.html'
+
+
 
 

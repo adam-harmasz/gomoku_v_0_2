@@ -122,7 +122,7 @@ def get_game_record_from_list(game_record_list):
         elif v == 'white' or v == 'black' or v == '--':
             pass
         else:
-            game_record_list_with_only_moves.append((counter, v))
+            game_record_list_with_only_moves.append(v)
             counter += 1
 
     return game_record_list_with_only_moves

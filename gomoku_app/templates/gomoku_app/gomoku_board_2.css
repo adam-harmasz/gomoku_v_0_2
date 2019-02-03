@@ -1,0 +1,35 @@
+.board-cell {
+    fill: transparent;
+    stroke: black;
+}
+
+.board-container {
+    background-color: #ebc98a;
+    height: 610px;
+    width: 610px;
+;
+}
+
+.contents .board-cell-intersection .board-cell{
+    -webkit-tap-highlight-color: transparent;
+}
+
+.board-cell-intersection-rect  .board-cell-intersection-circle{
+    fill: transparent;
+}
+
+svg {
+    fill: transparent;
+}
+
+.contents {
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+}
+
+.board-cell-intersection-coordinates {
+    fill: transparent;
+    font-size: 20px;
+    font-style: oblique;
+}

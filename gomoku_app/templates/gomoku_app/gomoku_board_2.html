@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Gomoku Board</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="gomoku_board_2.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"
+            integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
+            crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="../../../config/static/gomoku_app/js/app.js"></script>
+
+    <style>
+    </style>
+</head>
+<body>
+    <div class="board-container">
+        <svg class="svg_elem" xmlns="http://www.w3.org/2000/svg" version="1.1" width="610" height="610">
+            <defs>
+                <radialGradient id="black-gradient-c53a2568f185" cy="15%" r="50%">
+                    <stop offset="0%" stop-color="hsl(0, 0%, 38%)"></stop>
+                    <stop offset="100%" stop-color="#39363D"></stop>
+                </radialGradient>
+                <radialGradient id="white-gradient-dc3f1c49df95" cy="15%" r="50%">
+                    <stop offset="0%" stop-color="#FFFFFF"></stop>
+                    <stop offset="100%" stop-color="#fafdfc"></stop>
+                </radialGradient>
+            </defs>
+            <g class="contents" transform="translate(35, 25)" fill="#ebc98a">
+                <g class="gomoku-board"></g>
+            </g>
+            <g class="intersections">
+                <g class="intersection_container">
+                </g>
+            </g>
+        </svg>
+    </div>
+
+    <script>
+
+    </script>
+</body>
+
+</html>

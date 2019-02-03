@@ -1,0 +1,105 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block style %}
+    <style>
+        .board-cell {
+        fill: transparent;
+        stroke: black;
+    }
+
+    .board-container {
+        background-color: #ebc98a;
+        height: 610px;
+        width: 610px;
+    ;
+    }
+
+    .contents .board-cell-intersection .board-cell{
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .board-cell-intersection-rect  .board-cell-intersection-circle{
+        fill: transparent;
+    }
+
+    svg {
+        fill: transparent;
+    }
+
+    .contents {
+        position: relative;
+        overflow: hidden;
+        cursor: default;
+    }
+
+    .board-cell-intersection-coordinates {
+        fill: transparent;
+        font-size: 20px;
+        font-style: oblique;
+    }
+
+    img {
+        height: 30px;
+        width: 30px;
+        vertical-align: center;
+        margin-bottom: 9px;
+    }
+</style>
+{% endblock style %}
+
+{% block content %}
+    <div class="stone-container">
+        <img id="black_stone" src="{% static 'gomoku_app/img/Black_Go_Stone.png' %}">
+        <img id="white_stone" src="{% static 'gomoku_app/img/White_Go_Stone.png' %}">
+
+    </div>
+    <div class="board-container">
+        <svg class="svg_elem" xmlns="http://www.w3.org/2000/svg" version="1.1" width="610" height="610">
+            <defs>
+                <radialGradient id="black-gradient-c53a2568f185" cy="15%" r="50%">
+                    <stop offset="0%" stop-color="hsl(0, 0%, 38%)"></stop>
+                    <stop offset="100%" stop-color="#39363D"></stop>
+                </radialGradient>
+                <radialGradient id="white-gradient-dc3f1c49df95" cy="15%" r="50%">
+                    <stop offset="0%" stop-color="#FFFFFF"></stop>
+                    <stop offset="100%" stop-color="#fafdfc"></stop>
+                </radialGradient>
+            </defs>
+            <g class="contents" transform="translate(35, 25)" fill="#ebc98a">
+                <g class="gomoku-board"></g>
+            </g>
+            <g class="intersections">
+                <g class="intersection_container">
+                </g>
+            </g>
+        </svg>
+        </div>
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-2" role="group" aria-label="Second group">
+            <button type="button" class="btn btn-secondary">start</button>
+            <button type="button" class="btn btn-secondary">clear</button>
+        </div>
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+            <button id="clear" type="button" class="btn btn-primary"><<</button>
+            <button type="prev" class="btn btn-primary"><</button>
+            <button type="next" class="btn btn-primary">></button>
+            <button type="end" class="btn btn-primary">>></button>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block jquery %}
+        <script src="{% static 'gomoku_app/js/app.js' %}"></script>
+
+    <script>
+        var game_record = '{{ object.game_record|escapejs }}',
+            black_player = '{{ object.black_player|escapejs }}',
+            white_player = '{{ object.white_player|escapejs }}',
+            swap = '{{ object.swap|escapejs }}',
+            swap_2 = '{{ object.swap_2|escapejs }}',
+            color_change = '{{ object.color_change|escapejs }}';
+
+
+    </script>
+{% endblock jquery %}

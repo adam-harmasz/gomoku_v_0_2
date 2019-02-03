@@ -1,0 +1,106 @@
+{% extends "core/base.html" %}
+{% block style %}
+    <style>
+        .board-cell {
+        fill: transparent;
+        stroke: black;
+    }
+
+    .board-container {
+        background-color: #ebc98a;
+        height: 610px;
+        width: 610px;
+    ;
+    }
+
+    .contents .board-cell-intersection .board-cell{
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .board-cell-intersection-rect  .board-cell-intersection-circle{
+        fill: transparent;
+    }
+
+    svg {
+        fill: transparent;
+    }
+
+    .contents {
+        position: relative;
+        overflow: hidden;
+        cursor: default;
+    }
+
+    .board-cell-intersection-coordinates {
+        fill: transparent;
+        font-size: 20px;
+        font-style: oblique;
+    }
+</style>
+{% endblock style %}
+{% block content %}
+    <h1>About Page</h1>
+    <div class="game-list">
+    </div>
+
+{% endblock content %}
+
+{% block jquery %}
+<script>
+    $(document).ready(function() {
+        function clear_field() {
+            $('#id_name').val('')
+        }
+
+        function ajax_list() {
+            var container = $(".game-list");
+            $.ajax({
+                url: "/api/game_records",
+                method: "GET",
+                success: function(data){
+                    container.html(data);
+                },
+                error: function(data){
+                    console.log("error");
+                    console.log(data);
+                }
+            })
+        }
+
+        {% comment %}function form_post_ajax() {
+            $(".my-list").submit(function(event) {
+                event.preventDefault();
+                var formData = new FormData();
+                formData.append( 'file', ($(this).find('[type=file]')[0].files[0]));
+                console.log(formData.file + "  THIS");
+                console.log(($(this).find('[type=file]')[0].files[0]) + "  file");
+                // var formData = this_.serialize();
+                console.log(formData);
+                $.ajax({
+                    enctype: 'multipart/form-data',
+                    type: "POST",
+                    url: "/api/v1/children/",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log('no i co?');
+                        console.log(data);
+                        clear_field();
+                        ajax_list();
+                    },
+                    error: function (data) {
+                        console.log('error');
+                        console.log(data.statusText + "  ERROR STATUS TEXT");
+                        console.log(data + "  ERROR DATA")
+
+                    }
+                })
+            })
+        }{% endcomment %}
+        ajax_list();
+        {#form_post_ajax();#}
+    })
+
+</script>
+{% endblock jquery %}
