@@ -5,6 +5,7 @@ $(document).ready(function () {
         console.log(color_change);
         console.log(typeof game_record_list);
 
+
     // this function will make gomoku board
     function gomoku_board_factory(data) {
         var gomoku_board = $(".gomoku-board"),
@@ -80,6 +81,7 @@ $(document).ready(function () {
         }
     };
 
+
     // showing coordinates of mouse point when mouse over board
     function coordinates_hoover_event(data) {
         var gomoku_board_coordinates = $(".inner-intersection");
@@ -96,6 +98,7 @@ $(document).ready(function () {
         });
     };
 
+
     // adding next move from the game record after mouse click
     function add_next_move(data) {
         var next_btn = $("#next");
@@ -110,6 +113,7 @@ $(document).ready(function () {
                         move += 1;
                         if (move === 1) {
                             undo_move();
+                            boardClear();
                         } else if (move >= game_record_list.length) {
                             silenceNext();
                         }
@@ -119,6 +123,7 @@ $(document).ready(function () {
                         move += 1;
                         if (move === 1) {
                             undo_move();
+                            boardClear();
                         } else if (move >= game_record_list.length) {
                             silenceNext();
                         }
@@ -128,6 +133,8 @@ $(document).ready(function () {
 
             })
     }
+
+
     // undo move on board according to game record
     function undo_move() {
         var undo_btn = $('#undo');
@@ -139,6 +146,8 @@ $(document).ready(function () {
                 if (move === game_record_list.length) {
                     silenceNext();
                     add_next_move();
+                    silenceLast();
+                    lastMove();
                 }
                 move -= 1;
                 $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'transparent');
@@ -148,6 +157,7 @@ $(document).ready(function () {
                 }
             })
     }
+
 
     // show all moves at once
         function lastMove() {
@@ -172,8 +182,31 @@ $(document).ready(function () {
                 undo_move();
                 silenceNext();
                 silenceLast();
+                boardClear();
             });
         }
+
+
+     // function responsible for clearing board, and reseting turn and move value
+    function boardClear() {
+        var circle_cell = $('.board-cell-intersection-circle'),
+            clearButton = $('#clear');
+
+        clearButton.on('click', function (event) {
+            event.preventDefault();
+            console.log('asd');
+            circle_cell.css('fill', 'transparent');
+            turn = 'O';
+            move = 0;
+            silenceNext();
+            silenceUndo();
+            silenceLast();
+            add_next_move();
+            lastMove();
+            silenceBoardClear();
+        })
+    }
+
 
     // function enabling events
     function initGame() {
@@ -182,6 +215,7 @@ $(document).ready(function () {
         start.one('click', function (event) {
             event.preventDefault();
             add_next_move();
+            lastMove();
             coordinates_hoover_event();
             console.log('start!');
         })
@@ -199,6 +233,10 @@ $(document).ready(function () {
 
     function silenceLast() {
         $('#end').off('click');
+    }
+
+    function silenceBoardClear() {
+        $('#clear').off('click');
     }
 
     initGame();
