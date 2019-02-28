@@ -72,9 +72,8 @@ def create_profile(sender, instance, created, **kwargs):
     """Signal to create profile after user object is created"""
     if created:
         models.UserProfile.objects.create(user=instance)
+    instance.userprofile.save ()
 
-
-@receiver(post_save, sender=User)
-def save_profile(sender, instance, **kwargs):
-    """Signal to save profile"""
-    instance.userprofile.save()
+# @receiver(post_save, sender=User)
+# def save_profile(sender, instance, **kwargs):
+#     """Signal to save profile"""

@@ -175,4 +175,16 @@ LOGIN_URL = '/accounts/login'
 
 # LOGOUT_REDIRECT_URL = '/accounts/login'
 
+# EMAIL SETTINGS
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'henry538.python@gmail.com'
+EMAIL_HOST_PASSWORD = get_env_variable('EMAIL_PASS')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+# # AUTHENTICATION BACKEND
+# AUTHENTICATION_BACKENDS = [
+#     'django.contrib.auth.backends.ModelBackend',
+#     # 'accounts.authentication.EmailAuthBackend',
+# ]
