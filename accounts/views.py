@@ -18,7 +18,7 @@ class RegisterView(View):
         form = UserRegisterForm()
         return render(
             request,
-            'accounts/registration_form.html',
+            'registration/registration_form.html',
             {'form': form})
 
     def post(self, request):
@@ -31,11 +31,8 @@ class RegisterView(View):
             messages.success(request, f'Account created for {username}!')
             return redirect('/api')
 
-# @login_required
-# def profile(request):
-#     return render(request, 'users/profile.html')
-
 
 class UserProfileView(LoginRequiredMixin, DetailView):
+    """Detail view of user profile"""
     queryset = User.objects.all()
     template_name = 'accounts/profile.html'

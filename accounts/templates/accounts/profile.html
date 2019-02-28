@@ -1,14 +1,80 @@
 {% extends "core/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
-      <div class="media">
+<div class="content-section">
+    <div class="media">
         <img class="rounded-circle account-img" src="{{ user.userprofile.picture.url }}">
         <div class="media-body">
-          <h2 class="account-heading">{{ user.username }}</h2>
-          <p class="text-secondary">{{ user.email }}</p>
+            <h2 class="account-heading">{{ user.username }}</h2>
+            <p class="text-secondary">{{ user.email }}</p>
         </div>
-      </div>
-      <!-- FORM HERE -->
+        <div class="info">
+            <p>
+                You can change your password
+                <a href="{% url 'password_change' %}">here</a>
+            </p>
+        </div>
     </div>
+    <!-- FORM HERE -->
+</div>
 {% endblock content %}
+
+{% block jquery %}
+    <script>
+    $(document).ready(function() {
+        function clear_field() {
+            $('#id_name').val('')
+        }
+
+        function ajax_list() {
+            var container = $(".game-list");
+            $.ajax({
+                url: "/api/game_records",
+                method: "GET",
+                success: function(data){
+                    container.html(data);
+                },
+                error: function(data){
+                    console.log("error");
+                    console.log(data);
+                }
+            })
+        }
+
+        {% comment %}function form_post_ajax() {
+            $(".my-list").submit(function(event) {
+                event.preventDefault();
+                var formData = new FormData();
+                formData.append( 'file', ($(this).find('[type=file]')[0].files[0]));
+                console.log(formData.file + "  THIS");
+                console.log(($(this).find('[type=file]')[0].files[0]) + "  file");
+                // var formData = this_.serialize();
+                console.log(formData);
+                $.ajax({
+                    enctype: 'multipart/form-data',
+                    type: "POST",
+                    url: "/api/v1/children/",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        console.log('no i co?');
+                        console.log(data);
+                        clear_field();
+                        ajax_list();
+                    },
+                    error: function (data) {
+                        console.log('error');
+                        console.log(data.statusText + "  ERROR STATUS TEXT");
+                        console.log(data + "  ERROR DATA")
+
+                    }
+                })
+            })
+        }{% endcomment %}
+        ajax_list();
+        {#form_post_ajax();#}
+    })
+
+</script>
+{% endblock jquery %}

@@ -38,21 +38,11 @@
         font-style: oblique;
     }
 
-    img {
-        height: 30px;
-        width: 30px;
-        vertical-align: center;
-        margin-bottom: 9px;
-    }
 </style>
 {% endblock style %}
 
 {% block content %}
-    <div class="stone-container">
-        <img id="black_stone" src="{% static 'gomoku_app/img/Black_Go_Stone.png' %}">
-        <img id="white_stone" src="{% static 'gomoku_app/img/White_Go_Stone.png' %}">
 
-    </div>
     <div class="board-container">
         <svg class="svg_elem" xmlns="http://www.w3.org/2000/svg" version="1.1" width="610" height="610">
             <defs>
