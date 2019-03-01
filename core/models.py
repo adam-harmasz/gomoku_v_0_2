@@ -8,6 +8,7 @@ from django.contrib.auth.models import (
 from django.conf import settings
 from django.db.models.signals import post_save
 from PIL import Image
+from django.urls import reverse
 
 from accounts.signals import create_gomoku_record_object, update_player_stats
 
@@ -33,6 +34,7 @@ def gomoku_record_image_file_path(instance, filename):
 class UserProfile(models.Model):
     """Class defining User object linked to profile by one-to-one"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    slug = models.SlugField(max_length=250, unique=True)
     picture = models.ImageField(
         default='default.jpg',
         upload_to=profile_image_file_path
@@ -46,9 +48,12 @@ class UserProfile(models.Model):
         img = Image.open(self.picture.path)
 
         if img.height > 300 or img.width > 300:
-            output_size =(300, 300)
+            output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.picture.path)
+
+    def get_absolute_url(self):
+        return reverse('accounts:profile-detail', args=[self.slug])
 
 
 class Player(models.Model):

@@ -2,6 +2,9 @@ from django.urls import path
 
 from . import views
 
+app_name = 'gomoku_app'
+
+
 urlpatterns = [
     path(
         'upload_file',

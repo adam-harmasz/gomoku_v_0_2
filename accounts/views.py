@@ -6,6 +6,7 @@ from django.views.generic import DetailView
 from django.contrib.auth import get_user_model
 
 from .forms import UserRegisterForm
+from core import models
 
 User = get_user_model()
 
@@ -39,5 +40,5 @@ class RegisterView(View):
 
 class UserProfileView(LoginRequiredMixin, DetailView):
     """Detail view of user profile"""
-    queryset = User.objects.all()
+    queryset = models.UserProfile.objects.all()
     template_name = 'accounts/profile.html'

@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
@@ -7,12 +6,14 @@ User = get_user_model()
 
 
 class UserRegisterForm(forms.ModelForm):
+    # Form for user registration with email, and user validation
     email = forms.EmailField()
     password = forms.CharField(required=True,
+                               label='Password',
                                widget=forms.PasswordInput)
     password2 = forms.CharField(required=True,
-                                widget=forms.PasswordInput,
-                                help_text='Please enter password twice')
+                                label='Repeat password',
+                                widget=forms.PasswordInput,)
 
     class Meta:
         model = User

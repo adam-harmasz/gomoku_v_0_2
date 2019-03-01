@@ -3,6 +3,8 @@ from django.contrib.auth import views as auth_views
 
 from . import views
 
+app_name = 'accounts'
+
 
 urlpatterns = [
     # login and registration endpoints
@@ -31,7 +33,7 @@ urlpatterns = [
     path('reset/done', auth_views.PasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
     # detail view
-    path('profile/<int:pk>', views.UserProfileView.as_view(),
+    path('profile/<slug:slug>/', views.UserProfileView.as_view(),
          name='profile-detail'),
 
 ]

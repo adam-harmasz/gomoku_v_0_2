@@ -24,8 +24,8 @@ from .routers import router
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
-    path('accounts/', include('accounts.urls')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
     path('api/', include(router.urls)),
-    path('gomoku/', include('gomoku_app.urls')),
+    path('gomoku/', include('gomoku_app.urls', namespace='gomoku')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

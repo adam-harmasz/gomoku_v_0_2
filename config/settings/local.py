@@ -169,7 +169,7 @@ REST_FRAMEWORK = {
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = '/api'
+# LOGIN_REDIRECT_URL = '/api'
 
 LOGIN_URL = '/accounts/login'
 
