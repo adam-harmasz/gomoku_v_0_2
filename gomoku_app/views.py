@@ -28,9 +28,9 @@ class ExtractDataRedirectView(LoginRequiredMixin, View):
         form = forms.GomokuRecordForm(request.POST, request.FILES)
         user = User.objects.get(username=self.request.user)
         if form.is_valid():
-            files = form.cleaned_data['file']
+            file = form.cleaned_data['file']
             models.GomokuRecordFile.objects.create(
-                game_record_file=files,
+                game_record_file=file,
                 profile=user,
                 status='file'
             )
@@ -52,11 +52,11 @@ class DownloadExtractDataRedirectView(LoginRequiredMixin, View):
 
     def post(self, request):
         form = forms.GomokuRecordURLForm(request.POST)
-        user = User.objects.get (username=self.request.user)
+        user = User.objects.get(username=self.request.user)
         if form.is_valid():
-            files = form.cleaned_data['file']
+            url = form.cleaned_data['url']
             models.GomokuRecordFile.objects.create(
-                game_record_file=files,
+                url=url,
                 profile=user,
                 status='url'
             )

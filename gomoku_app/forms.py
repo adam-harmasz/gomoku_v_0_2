@@ -11,4 +11,5 @@ class GomokuRecordForm(forms.Form):
 
 class GomokuRecordURLForm(forms.Form):
     """Form to pass url to the game record at playok.com"""
-    file = forms.CharField()
+    url = forms.CharField()
+

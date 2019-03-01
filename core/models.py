@@ -95,8 +95,10 @@ class GomokuRecordFile(models.Model):
     profile = models.ForeignKey(User, on_delete=models.CASCADE)
     game_record_file = models.FileField(
         null=True,
+        blank=True,
         upload_to=gomoku_record_image_file_path
     )
+    url = models.CharField(max_length=255, null=True, blank=True)
     status = models.CharField(max_length=50)
 
     def __str__(self):

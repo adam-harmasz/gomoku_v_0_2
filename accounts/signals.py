@@ -14,15 +14,17 @@ def create_gomoku_record_object(sender, instance, created, **kwargs):
     """
     if created:
         payload = None
+        # checking whether game will be uploaded from file or
+        # downloaded directly from playok.com
         if instance.status == 'file':
             payload = extract_data_from_game_record_file(
                 filename=f'config/media/{instance.game_record_file}'
             )
         elif instance.status == 'url':
+            print(instance.url, 'JESTEM')
             payload = extract_data_from_game_record_file(
-                url=instance.game_record_file
+                url=instance.url
             )
-
         models.Player.objects.get_or_create(
             nickname=payload['white'],
         )

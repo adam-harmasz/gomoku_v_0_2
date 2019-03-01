@@ -7,13 +7,14 @@ import requests
 def extract_data(record_content):
     """Function to extract data from game record content"""
 
-    # game_record_regex = r'(1.)(\s).+((0-1)|(1-0)|(1/2-1/2))'
+    # regex expressions to match content in game record
     game_record_regex = r'(1.)(\s).+([a-z0-9]( ))'
     black_player_nickname_regex = r'(Black)(\s).+([a-zA-Z])'
     white_player_nickname_regex = r'(White)(\s).+([a-zA-Z])'
     result_regex = r'(Result)(\s).+((0-1)|(1-0)|(1/2-1/2))'
     date_regex = r'(Date)(\s).+([0-9])'
     time_regex = r'(Time)(\s).+([0-9])'
+
     game_record_string = re.search(
         game_record_regex,
         record_content,
@@ -110,7 +111,8 @@ def get_data_from_str_generator(*data_list_params):
 
 def make_game_record_list(game_record_str):
     """Function making game record list from the string"""
-    game_record_list = ' '.join(game_record_str.split('\n')).split (' ')
+    game_record_list = ' '.join(
+        ' '.join(game_record_str.split('\n')).split('\r')).split(' ')
     game_record_list.remove('')
     # removing . which was attached to numbers
     for i, v in enumerate(game_record_list):
