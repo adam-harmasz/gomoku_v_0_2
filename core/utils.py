@@ -1,14 +1,12 @@
 import re
 from datetime import datetime
 from collections import defaultdict
+import requests
 
 
-def extract_data_from_game_record_file(filename):
-    """
-    helper function to extract data from the game record file
-    function should return dictionary with values:
-    white_player, black_player, date_time, result and game_record
-    """
+def extract_data(record_content):
+    """Function to extract data from game record content"""
+
     # game_record_regex = r'(1.)(\s).+((0-1)|(1-0)|(1/2-1/2))'
     game_record_regex = r'(1.)(\s).+([a-z0-9]( ))'
     black_player_nickname_regex = r'(Black)(\s).+([a-zA-Z])'
@@ -16,61 +14,78 @@ def extract_data_from_game_record_file(filename):
     result_regex = r'(Result)(\s).+((0-1)|(1-0)|(1/2-1/2))'
     date_regex = r'(Date)(\s).+([0-9])'
     time_regex = r'(Time)(\s).+([0-9])'
+    game_record_string = re.search(
+        game_record_regex,
+        record_content,
+        re.MULTILINE | re.DOTALL
+    ).group()
+    black_player_nickname_str = re.search(
+        black_player_nickname_regex,
+        record_content).group()
+    white_player_nickname_str = re.search(
+        white_player_nickname_regex,
+        record_content).group()
+    date_str = re.search(
+        date_regex,
+        record_content).group()
+    time_str = re.search(
+        time_regex,
+        record_content).group()
+    result_str = re.search(
+        result_regex,
+        record_content).group()
 
-    with open(filename, 'r') as f:
-        f_content = f.read()
-        game_record_string = re.search(
-            game_record_regex,
-            f_content,
-            re.MULTILINE | re.DOTALL
-        ).group()
-        black_player_nickname_str = re.search(
-            black_player_nickname_regex,
-            f_content).group()
-        white_player_nickname_str = re.search(
-            white_player_nickname_regex,
-            f_content).group()
-        date_str = re.search(
-            date_regex,
-            f_content).group()
-        time_str = re.search(
-            time_regex,
-            f_content).group()
-        result_str = re.search(
-            result_regex,
-            f_content).group()
+    payload = defaultdict(list)
+    game_record_list = make_game_record_list(game_record_string)
+    swap_and_color_data = get_data_about_color_swap(game_record_list)
 
-        payload = defaultdict(list)
-        game_record_list = make_game_record_list(game_record_string)
-        swap_and_color_data = get_data_about_color_swap(game_record_list)
+    # Adding keys and values to the dictionary
+    payload['game_date'] = get_date_data_from_str(time_str, date_str)
+    payload['game_record'] = get_game_record_from_list(game_record_list)
+    payload['swap'] = swap_and_color_data[0]
+    payload['swap_2'] = swap_and_color_data[1]
+    payload['color_change'] = swap_and_color_data[2]
 
-        # Adding keys and values to the dictionary
-        payload['game_date'] = get_date_data_from_str(time_str, date_str)
-        payload['game_record'] = get_game_record_from_list(game_record_list)
-        payload['swap'] = swap_and_color_data[0]
-        payload['swap_2'] = swap_and_color_data[1]
-        payload['color_change'] = swap_and_color_data[2]
+    for _ in get_data_from_str_generator(
+            black_player_nickname_str,
+            white_player_nickname_str,
+            result_str):
+        if _[0] == 'result' and _[1] == '1-0':
+            payload[_[0]] = 'black'
+        elif _[0] == 'result' and _[1] == '0-1':
+            payload[_[0]] = 'white'
+        elif _[0] == 'result' and _[1] == '1/2-1/2':
+            payload[_[0]] = 'draw'
+        else:
+            payload[_[0]] = _[1]
+        make_game_record_list(game_record_string)
 
-        for _ in get_data_from_str_generator(
-                            black_player_nickname_str,
-                            white_player_nickname_str,
-                            result_str):
-            if _[0] == 'result' and _[1] == '1-0':
-                payload[_[0]] = 'black'
-            elif _[0] == 'result' and _[1] == '0-1':
-                payload[_[0]] = 'white'
-            elif _[0] == 'result' and _[1] == '1/2-1/2':
-                payload[_[0]] = 'draw'
-            else:
-                payload[_[0]] = _[1]
-            make_game_record_list(game_record_string)
+    return payload
 
-        return payload
+
+def extract_data_from_game_record_file(filename=None, url=None):
+    """
+    helper function to extract data from the game record file
+    function should return dictionary with values:
+    white_player, black_player, date_time, result and game_record
+    """
+    if filename is not None and url is not None:
+        raise ValueError(
+            'You can use only one way to create record at the time')
+    elif filename is not None:
+        with open(filename, 'r') as f:
+            f_content = f.read()
+            return extract_data(f_content)
+    elif url is not None:
+        res = requests.get(url)
+        if len(res.text) == 0:
+            raise ValueError('no content')
+        return extract_data(res.text)
 
 
 def get_date_data_from_str(time_str, date_str):
     """
-    Function which will extract exact datetime data from the string and will
+    Function which will extract datetime data from the string and will
     be used in the 'extract_data_from_game_record_file' function to avoid
     repeating the code
     function should return the datetime value
@@ -79,7 +94,6 @@ def get_date_data_from_str(time_str, date_str):
     date_list = date_str.split(' "')
     date_time_list = date_list[1] + ' ' + time_list[1]
     converted_time = datetime.strptime(date_time_list, '%Y.%m.%d %H:%M:%S')
-
     return converted_time
 
 
@@ -101,7 +115,7 @@ def make_game_record_list(game_record_str):
     # removing . which was attached to numbers
     for i, v in enumerate(game_record_list):
         if '.' in v:
-            v = v.rstrip ('.')
+            v = v.rstrip('.')
             game_record_list[i] = int(v)
 
     return game_record_list

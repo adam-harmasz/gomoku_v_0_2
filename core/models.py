@@ -16,7 +16,7 @@ User = settings.AUTH_USER_MODEL
 
 
 def profile_image_file_path(instance, filename):
-    """Generate file path for new recipe image"""
+    """Generate file path for new profile image"""
     ext = filename.split('.')[-1]
     filename = f'{uuid.uuid4()}.{ext}'
 
@@ -24,7 +24,7 @@ def profile_image_file_path(instance, filename):
 
 
 def gomoku_record_image_file_path(instance, filename):
-    """Generate file path for new recipe image"""
+    """Generate file path for new gomoku record file"""
     ext = filename.split('.')[-1]
     filename = f'{uuid.uuid4()}.{ext}'
 
@@ -97,6 +97,7 @@ class GomokuRecordFile(models.Model):
         null=True,
         upload_to=gomoku_record_image_file_path
     )
+    status = models.CharField(max_length=50)
 
     def __str__(self):
         return f'game record owned by: {self.profile}'

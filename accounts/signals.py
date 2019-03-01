@@ -13,9 +13,16 @@ def create_gomoku_record_object(sender, instance, created, **kwargs):
     Signal to create players and game record object after file is uploaded
     """
     if created:
-        payload = extract_data_from_game_record_file(
-            f'config/media/{instance.game_record_file}'
-        )
+        payload = None
+        if instance.status == 'file':
+            payload = extract_data_from_game_record_file(
+                filename=f'config/media/{instance.game_record_file}'
+            )
+        elif instance.status == 'url':
+            payload = extract_data_from_game_record_file(
+                url=instance.game_record_file
+            )
+
         models.Player.objects.get_or_create(
             nickname=payload['white'],
         )
