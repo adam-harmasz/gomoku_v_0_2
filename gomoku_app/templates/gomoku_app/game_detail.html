@@ -76,8 +76,34 @@
             <button id="end" type="button" class="btn btn-primary">>></button>
         </div>
     </div>
-
 {% endblock content %}
+{% block sidebar %}
+    <ul class="list-group list-group-flush">
+        {% if object.color_change %}
+            <li class="list-group-item">
+                <span>{{ object.white_player }}</span>
+                <img src="{% static 'gomoku_app/img/Black_Go_Stone.png' %}" style="width: 30px; height: 30px">
+                 -
+                <span>{{ object.black_player }}</span>
+                <img src="{% static 'gomoku_app/img/White_Go_Stone.png' %}" style="width: 30px; height: 30px">
+            </li>
+        {% else %}
+            <li class="list-group-item ">
+                <img src="{% static 'gomoku_app/img/Black_Go_Stone.png' %}" style="width: 30px; height: 30px">
+                <span>{{ object.black_player }}</span>
+                -
+                <span>{{ object.white_player }}</span>
+                <img src="{% static 'gomoku_app/img/White_Go_Stone.png' %}" style="width: 30px; height: 30px">
+            </li>
+        {% endif %}
+        <li class="list-group-item ">
+            <span>{{ object.black_player }} opened the game.</span>
+        </li>
+        <li class="list-group-item ">
+            <span>Swap2 option {% if object.swap_2 %}was{% else %}wasn't{% endif %} used.</span>
+        </li>
+    </ul>
+{% endblock sidebar %}
 
 {% block jquery %}
         <script src="{% static 'gomoku_app/js/app.js' %}"></script>
