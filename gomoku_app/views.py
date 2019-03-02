@@ -65,15 +65,19 @@ class DownloadExtractDataRedirectView(LoginRequiredMixin, View):
 
 class GameRecordListView(LoginRequiredMixin, ListView):
     """View displaying list of gomoku games"""
-    queryset = models.GomokuRecord.objects.all()
+    # queryset = models.GomokuRecord.objects.all()
     template_name = 'gomoku_app/game_list.html'
+    paginate_by = 15
+
+    def get_queryset(self):
+        user = self.request.user
+        qs = models.GomokuRecord.objects.filter(profile=user)
+        if qs.exists():
+            return qs
+        return models.GomokuRecord.objects.all()
 
 
 class GameRecordDetailView(LoginRequiredMixin, DetailView):
     """View displaying list of gomoku games"""
     queryset = models.GomokuRecord.objects.all()
     template_name = 'gomoku_app/game_detail.html'
-
-
-
-

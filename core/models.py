@@ -85,9 +85,16 @@ class GomokuRecord(models.Model):
     swap = models.BooleanField()
     swap_2 = models.BooleanField()
     color_change = models.BooleanField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created', 'game_date')
 
     def __str__(self):
         return f'{self.black_player} - {self.white_player}'
+
+    def get_absolute_url(self):
+        return reverse('gomoku:game-detail', args=[self.id])
 
 
 class GomokuRecordFile(models.Model):
