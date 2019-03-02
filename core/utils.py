@@ -76,9 +76,11 @@ def extract_data_from_game_record_file(filename=None, url=None):
     elif filename is not None:
         with open(filename, 'r') as f:
             f_content = f.read()
+            print(f_content)
             return extract_data(f_content)
     elif url is not None:
         res = requests.get(url)
+        print(res.text)
         if len(res.text) == 0:
             raise ValueError('no content')
         return extract_data(res.text)
@@ -111,9 +113,13 @@ def get_data_from_str_generator(*data_list_params):
 
 def make_game_record_list(game_record_str):
     """Function making game record list from the string"""
+
+    # removing \n and \r whitespaces from game record
     game_record_list = ' '.join(
         ' '.join(game_record_str.split('\n')).split('\r')).split(' ')
-    game_record_list.remove('')
+    # removing empty strings from the list
+    game_record_list = [_ for _ in game_record_list if _ != '']
+
     # removing . which was attached to numbers
     for i, v in enumerate(game_record_list):
         if '.' in v:
@@ -140,7 +146,7 @@ def get_game_record_from_list(game_record_list):
         else:
             game_record_list_with_only_moves.append(v)
             counter += 1
-
+    print(game_record_list_with_only_moves)
     return game_record_list_with_only_moves
 
 

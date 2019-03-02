@@ -13,9 +13,8 @@ urlpatterns = [
          template_name='registration/login.html',
          redirect_authenticated_user=True),
          name='login'),
-    path('logout/',
-         auth_views.LogoutView.as_view(template_name='registration/logout.html'),
-         name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(
+             template_name='registration/logout.html'), name='logout'),
     # Password change
     path('password_change/', auth_views.PasswordChangeView.as_view(),
          name='password_change'),

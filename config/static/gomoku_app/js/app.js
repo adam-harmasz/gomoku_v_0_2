@@ -3,7 +3,7 @@ $(document).ready(function () {
         move = 0;
         game_record_list = game_record.slice(1, -1).split(', ');
         console.log(color_change);
-        console.log(typeof game_record_list);
+        console.log(game_record_list, 'game record');
 
 
     // this function will make gomoku board
@@ -94,7 +94,7 @@ $(document).ready(function () {
             g_elem_inner.mouseout(function () {
                 text_elem.css("fill", "transparent");
             });
-            console.log($(val).find("text"));
+            // console.log($(val).find("text"));
         });
     };
 
@@ -102,14 +102,12 @@ $(document).ready(function () {
     // adding next move from the game record after mouse click
     function add_next_move(data) {
         var next_btn = $("#next");
-            console.log(move);
             next_btn.on('click', function (event) {
                 event.preventDefault();
                 turn = turn === 'O' ? 'X' : 'O';
                 if (move <= game_record_list.length) {
                     if (turn === 'O') {
                         $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'white');
-                        console.log("asdasd", move);
                         move += 1;
                         if (move === 1) {
                             undo_move();
@@ -119,7 +117,6 @@ $(document).ready(function () {
                         }
                     } else {
                         $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'black');
-                        console.log(move);
                         move += 1;
                         if (move === 1) {
                             undo_move();
@@ -138,7 +135,6 @@ $(document).ready(function () {
     // undo move on board according to game record
     function undo_move() {
         var undo_btn = $('#undo');
-            console.log(move);
             undo_btn.on('click', function (event) {
                 event.preventDefault();
                 turn = turn === 'O' ? 'X' : 'O';
@@ -150,8 +146,8 @@ $(document).ready(function () {
                     lastMove();
                 }
                 move -= 1;
+                console.log(game_record_list[move].slice(1, -1));
                 $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'transparent');
-                    console.log("asdasd", move);
                 if (move === 0) {
                     silenceUndo();
                 }
@@ -177,13 +173,14 @@ $(document).ready(function () {
                         move += 1;
                     }
                 }
-                console.log(move + "  który mamy ruch");
                 silenceUndo();
-                undo_move();
+                silenceLast();
                 silenceNext();
                 silenceLast();
+                undo_move();
                 boardClear();
             });
+
         }
 
 
@@ -194,7 +191,6 @@ $(document).ready(function () {
 
         clearButton.on('click', function (event) {
             event.preventDefault();
-            console.log('asd');
             circle_cell.css('fill', 'transparent');
             turn = 'O';
             move = 0;
@@ -204,7 +200,7 @@ $(document).ready(function () {
             add_next_move();
             lastMove();
             silenceBoardClear();
-        })
+        });
     }
 
 
@@ -218,7 +214,7 @@ $(document).ready(function () {
             lastMove();
             coordinates_hoover_event();
             console.log('start!');
-        })
+        });
     }
 
     // function removing click event from next button
