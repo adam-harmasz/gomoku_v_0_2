@@ -42,7 +42,6 @@
 {% endblock style %}
 
 {% block content %}
-
     <div class="board-container">
         <svg class="svg_elem" xmlns="http://www.w3.org/2000/svg" version="1.1" width="610" height="610">
             <defs>
@@ -63,7 +62,8 @@
                 </g>
             </g>
         </svg>
-        </div>
+    </div>
+    <hr>
     <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
         <div class="btn-group mr-2" role="group" aria-label="Second group">
             <button id="start" type="button" class="btn btn-secondary">start</button>
@@ -76,13 +76,21 @@
             <button id="end" type="button" class="btn btn-primary">>></button>
         </div>
     </div>
+    <hr>
+    <span class="info">Game record:</span><br />
+    <div class="d-flex flex-wrap">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div id="game-record" class="d-flex flex-wrap btn-gr btn-group mr-2" role="group" aria-label="First group">
+            </div>
+        </div>
+    </div>
 {% endblock content %}
 {% block sidebar %}
     <ul class="list-group list-group-flush">
         {% if object.color_change %}
             <li class="list-group-item">
-                <span>{{ object.white_player }}</span>
                 <img src="{% static 'gomoku_app/img/Black_Go_Stone.png' %}" style="width: 30px; height: 30px">
+                <span>{{ object.white_player }}</span>
                  -
                 <span>{{ object.black_player }}</span>
                 <img src="{% static 'gomoku_app/img/White_Go_Stone.png' %}" style="width: 30px; height: 30px">
@@ -97,12 +105,18 @@
             </li>
         {% endif %}
         <li class="list-group-item ">
-            <span>{{ object.black_player }} opened the game.</span>
+            <span>
+                {{ object.black_player }} opened the game.
+            </span>
         </li>
-        <li class="list-group-item ">
+        <li class="list-group-item">
             <span>Swap2 option {% if object.swap_2 %}was{% else %}wasn't{% endif %} used.</span>
         </li>
+        <li class="list-group-item">
+            <span>Color{% if object.color_change %} was{% else %} wasn't{% endif %} changed</span>
+        </li>
     </ul>
+
 {% endblock sidebar %}
 
 {% block jquery %}

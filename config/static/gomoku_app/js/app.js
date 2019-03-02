@@ -2,7 +2,6 @@ $(document).ready(function () {
     var turn = 'O',
         move = 0;
         game_record_list = game_record.slice(1, -1).split(', ');
-        console.log(color_change);
         console.log(game_record_list, 'game record');
 
 
@@ -203,7 +202,6 @@ $(document).ready(function () {
         });
     }
 
-
     // function enabling events
     function initGame() {
         var start = $('#start');
@@ -213,7 +211,56 @@ $(document).ready(function () {
             add_next_move();
             lastMove();
             coordinates_hoover_event();
+            game_record_move();
             console.log('start!');
+        });
+    }
+
+    // function creating game record list to display in a template
+    function create_game_record() {
+        var game_record_tag = $('#game-record');
+            game_record_length = game_record_list.length;
+
+        for (var i = 0; i < game_record_length; i++) {
+            var list_group_item = $("<button type='button' class='btn-group btn-primary game-record-buttons' name='" +
+                (i + 1) + "'>" + (i + 1) + ": " + game_record_list[i].slice(1, -1) + "</button>");
+            $(game_record_tag.append(list_group_item));
+
+            if (i + 1 === game_record_length) {
+                list_group_item.on('click', function (e) {
+                    e.preventDefault();
+                    silenceNext();
+                    silenceUndo();
+                    undo_move();
+                });
+            }
+        }
+    }
+    // function adding events to game record to allow move to exact move
+    function game_record_move() {
+        var game_record_buttons = $('button.game-record-buttons'),
+            circle_cell = $('.board-cell-intersection-circle');
+        game_record_buttons.on('click', function (e) {
+            e.preventDefault();
+            var button_name_val = parseInt($(this).attr('name'));
+            circle_cell.css('fill', 'transparent');
+            turn = 'O';
+            move = 0;
+            for (var i = 0; i < button_name_val; i++) {
+                turn = turn === 'O' ? 'X' : 'O';
+               if (turn === 'O') {
+                    $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'white');
+                    move += 1;
+                } else {
+                    $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'black');
+                    move += 1;
+                }
+                if (move === game_record_list.length) {
+                    silenceLast();
+                } else {
+                    lastMove();
+                }
+            }
         });
     }
 
@@ -237,4 +284,5 @@ $(document).ready(function () {
 
     initGame();
     gomoku_board_factory();
+    create_game_record();
 });
