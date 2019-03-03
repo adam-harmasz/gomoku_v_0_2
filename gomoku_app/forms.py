@@ -11,7 +11,8 @@ class GomokuRecordForm(forms.Form):
 
 class GomokuRecordURLForm(forms.Form):
     """Form to pass url to the game record at playok.com"""
-    url = forms.CharField()
+    url = forms.CharField(
+        help_text='Paste url to the game from kurnik.pl or playok.com')
 
     def clean_url(self):
         """

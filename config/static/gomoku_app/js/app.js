@@ -256,7 +256,7 @@ $(document).ready(function () {
                     $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'black');
                     move += 1;
                 }
-                if (move == game_record_list.length) {
+                if (move === game_record_list.length) {
                     silence_last_move();
                 } else {
                     last_move();
@@ -266,7 +266,6 @@ $(document).ready(function () {
             }
             silence_undo_move();
             undo_move();
-
         });
     }
 
