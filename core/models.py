@@ -10,7 +10,7 @@ from django.db.models.signals import post_save
 from PIL import Image
 from django.urls import reverse
 
-from accounts.signals import create_gomoku_record_object, update_player_stats
+from core.signals import create_gomoku_record_object, update_player_stats
 
 User = settings.AUTH_USER_MODEL
 

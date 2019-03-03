@@ -167,3 +167,9 @@ def get_data_about_color_swap(game_record_list):
         if game_record_list[10] == 'white':
             color_change = True
     return [swap, swap_2, color_change]
+
+
+def check_domain(url):
+    """Function checking domain from the given url"""
+    domain_regex = r'((https)|(http))(://)([^/]+)'
+    return re.search(domain_regex, url).group()

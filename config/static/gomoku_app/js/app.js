@@ -88,7 +88,7 @@ $(document).ready(function () {
             var text_elem = $(val).find("text"),
                 g_elem_inner = $(val);
             g_elem_inner.mouseover(function () {
-                text_elem.css("fill", "blue");
+                text_elem.css("fill", "#16f7c6");
             });
             g_elem_inner.mouseout(function () {
                 text_elem.css("fill", "transparent");
@@ -99,10 +99,10 @@ $(document).ready(function () {
 
 
     // adding next move from the game record after mouse click
-    function add_next_move(data) {
+    function next_move(data) {
         var next_btn = $("#next");
-            next_btn.on('click', function (event) {
-                event.preventDefault();
+            next_btn.on('click', function (e) {
+                e.preventDefault();
                 turn = turn === 'O' ? 'X' : 'O';
                 if (move <= game_record_list.length) {
                     if (turn === 'O') {
@@ -110,18 +110,18 @@ $(document).ready(function () {
                         move += 1;
                         if (move === 1) {
                             undo_move();
-                            boardClear();
+                            board_clear();
                         } else if (move >= game_record_list.length) {
-                            silenceNext();
+                            silence_next_move();
                         }
                     } else {
                         $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'black');
                         move += 1;
                         if (move === 1) {
                             undo_move();
-                            boardClear();
+                            board_clear();
                         } else if (move >= game_record_list.length) {
-                            silenceNext();
+                            silence_next_move();
                         }
                     }
 
@@ -134,32 +134,32 @@ $(document).ready(function () {
     // undo move on board according to game record
     function undo_move() {
         var undo_btn = $('#undo');
-            undo_btn.on('click', function (event) {
-                event.preventDefault();
+            undo_btn.on('click', function (e) {
+                e.preventDefault();
                 turn = turn === 'O' ? 'X' : 'O';
 
                 if (move === game_record_list.length) {
-                    silenceNext();
-                    add_next_move();
-                    silenceLast();
-                    lastMove();
+                    silence_next_move();
+                    next_move();
+                    silence_last_move();
+                    last_move();
                 }
                 move -= 1;
                 console.log(game_record_list[move].slice(1, -1));
                 $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'transparent');
                 if (move === 0) {
-                    silenceUndo();
+                    silence_undo_move();
                 }
             })
     }
 
 
     // show all moves at once
-        function lastMove() {
+        function last_move() {
             var last_button = $('#end');
 
-            last_button.on('click', function (event) {
-                event.preventDefault();
+            last_button.on('click', function (e) {
+                e.preventDefault();
                 turn = 'O';
                 move = 0;
                 for (var i = 0; i < game_record_list.length; i++){
@@ -172,44 +172,44 @@ $(document).ready(function () {
                         move += 1;
                     }
                 }
-                silenceUndo();
-                silenceLast();
-                silenceNext();
-                silenceLast();
+                silence_undo_move();
+                silence_last_move();
+                silence_next_move();
+                silence_last_move();
                 undo_move();
-                boardClear();
+                board_clear();
             });
 
         }
 
 
      // function responsible for clearing board, and reseting turn and move value
-    function boardClear() {
+    function board_clear() {
         var circle_cell = $('.board-cell-intersection-circle'),
             clearButton = $('#clear');
 
-        clearButton.on('click', function (event) {
-            event.preventDefault();
+        clearButton.on('click', function (e) {
+            e.preventDefault();
             circle_cell.css('fill', 'transparent');
             turn = 'O';
             move = 0;
-            silenceNext();
-            silenceUndo();
-            silenceLast();
-            add_next_move();
-            lastMove();
-            silenceBoardClear();
+            silence_next_move();
+            silence_undo_move();
+            silence_last_move();
+            next_move();
+            last_move();
+            silence_voard_clear();
         });
     }
 
     // function enabling events
-    function initGame() {
+    function init_game() {
         var start = $('#start');
         move = 0;
-        start.one('click', function (event) {
-            event.preventDefault();
-            add_next_move();
-            lastMove();
+        start.one('click', function (e) {
+            e.preventDefault();
+            next_move();
+            last_move();
             coordinates_hoover_event();
             game_record_move();
             console.log('start!');
@@ -222,15 +222,16 @@ $(document).ready(function () {
             game_record_length = game_record_list.length;
 
         for (var i = 0; i < game_record_length; i++) {
-            var list_group_item = $("<button type='button' class='btn-group btn-primary game-record-buttons' name='" +
+            var list_group_item = $("<button type='button' class='btn-group btn-secondary game-record-buttons' name='" +
                 (i + 1) + "'>" + (i + 1) + ": " + game_record_list[i].slice(1, -1) + "</button>");
             $(game_record_tag.append(list_group_item));
 
             if (i + 1 === game_record_length) {
                 list_group_item.on('click', function (e) {
                     e.preventDefault();
-                    silenceNext();
-                    silenceUndo();
+                    silence_next_move();
+                    silence_undo_move();
+                    board_clear();
                     undo_move();
                 });
             }
@@ -255,34 +256,39 @@ $(document).ready(function () {
                     $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'black');
                     move += 1;
                 }
-                if (move === game_record_list.length) {
-                    silenceLast();
+                if (move == game_record_list.length) {
+                    silence_last_move();
                 } else {
-                    lastMove();
+                    last_move();
+                    silence_next_move();
+                    next_move();
                 }
             }
+            silence_undo_move();
+            undo_move();
+
         });
     }
 
     // function removing click event from next button
-    function silenceNext() {
+    function silence_next_move() {
         $('#next').off('click');
     }
 
         // function removing click event from next button
-    function silenceUndo() {
+    function silence_undo_move() {
         $('#undo').off('click');
     }
 
-    function silenceLast() {
+    function silence_last_move() {
         $('#end').off('click');
     }
 
-    function silenceBoardClear() {
+    function silence_voard_clear() {
         $('#clear').off('click');
     }
 
-    initGame();
+    init_game();
     gomoku_board_factory();
     create_game_record();
 });
