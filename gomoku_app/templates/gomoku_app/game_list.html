@@ -94,7 +94,6 @@
                 url: "/api/game_records",
                 method: "GET",
                 success: function(data){
-                    console.log(data);
                     game_records_list(data);
                 },
                 error: function(data){
@@ -106,8 +105,6 @@
         
         function game_records_list(data) {
             $.each(data, function (k, v) {
-                console.log((v['game_record']));
-
                 $('#game-record-list').append(
                     "<a href='/gomoku/game/" + v["id"] +
                     "' class='list-group-item list-group-item-action list-group-item-light game-record-item'>" +

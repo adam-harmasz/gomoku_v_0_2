@@ -6,7 +6,8 @@
             <img class="rounded-circle account-img" src="{{ user.userprofile.picture.url }}">
             <div class="media-body">
                 <h2 class="account-heading">{{ user.username }}</h2>
-                <p class="text-secondary">{{ user.email }}</p>
+                <p id="p-name-id" class="text-secondary">{{ user.first_name }}</p>
+                <p id="p-email-id" class="text-secondary">{{ user.email }}</p>
             </div>
 
         <!-- FORM HERE -->
@@ -55,15 +56,16 @@
             $("#user-edit-form").submit(function (e) {
                 e.preventDefault();
                 var this_ = $(this),
-                    formData = this_.serialize();
+                    formData = this_.serialize(),
+                    url = "/api/user/{{ user.id }}/";
 
                 $.ajax({
-                    url: "/api/user/{{ user.id }}/",
+                    url: url,
                     data: formData,
                     method: "PATCH",
                     success: function (data) {
                         console.log(data);
-
+                        ajax_get(url, change_profile_email);
                     },
                     error: function (data) {
                         console.log("error");
@@ -100,26 +102,36 @@
                 });
             });
 
-        $('#user-edit-id').click(function (e) {
-             e.preventDefault();
-             var id_first_name = $("#id_first_name"),
-                 id_email = $("#id_email");
+            $('#user-edit-id').click(function (e) {
+                 e.preventDefault();
+                var url = "/api/user/{{ user.id }}/";
+                ajax_get(url, fill_edit_form);
+            });
 
-             $.ajax({
-                url: "/api/user/{{ user.id }}",
-                method: "GET",
-                success: function(data){
-                    console.log(data['first_name']);
-                    console.log(data['email']);
-                    id_first_name.val(data['first_name']);
-                    id_email.val(data['email']);
-                },
-                error: function(data){
-                    console.log("error");
-                    console.log(data);
-                }
-            })
-        });
+            function ajax_get(url, success_func) {
+                $.ajax({
+                    url: url,
+                    method: "GET",
+                    success: function(data){
+                        console.log(data['first_name']);
+                        console.log(data['email']);
+                        success_func(data);
+                    },
+                    error: function(data){
+                        console.log("error");
+                        console.log(data);
+                    }
+                });
+            }
+
+            function fill_edit_form(data) {
+                $("#id_first_name").val(data['first_name']);
+                $("#id_email").val(data['email']);
+            }
+
+            function change_profile_email(data) {
+                $("#p-email-id").text(data["email"]);
+            }
 
         });
 
