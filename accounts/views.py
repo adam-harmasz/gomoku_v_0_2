@@ -26,7 +26,12 @@ class RegisterView(View):
         """function handling POST method"""
         form = forms.UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            cd = form.cleaned_data
+            User.objects.create_user(
+                username=cd['username'],
+                email=cd['email'],
+                password=cd['password']
+            )
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
             return redirect('/home')

@@ -1,5 +1,6 @@
 import os
 import uuid
+from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -39,6 +40,7 @@ class UserProfile(models.Model):
         default='default.jpg',
         upload_to=profile_image_file_path
     )
+    created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.user.username

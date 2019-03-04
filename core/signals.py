@@ -80,7 +80,10 @@ def update_player_stats(sender, instance, created, **kwargs):
 def create_profile(sender, instance, created, **kwargs):
     """Signal to create profile after user object is created"""
     if created:
-        models.UserProfile.objects.create(user=instance)
+        models.UserProfile.objects.create(
+            user=instance,
+            slug=instance.username
+        )
     instance.userprofile.save()
 
 # @receiver(post_save, sender=User)
