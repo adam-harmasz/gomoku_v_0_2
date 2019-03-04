@@ -109,7 +109,8 @@
                 console.log((v['game_record']));
 
                 $('#game-record-list').append(
-                    "<a href='/gomoku/game/" + v["id"] + "' class='list-group-item list-group-item-action list-group-item-light game-record-item'>" +
+                    "<a href='/gomoku/game/" + v["id"] +
+                    "' class='list-group-item list-group-item-action list-group-item-light game-record-item'>" +
                     v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a>")
             });
         }
