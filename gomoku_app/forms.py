@@ -5,12 +5,12 @@ from core.utils import check_domain
 
 class GomokuRecordForm(forms.Form):
     """Form to upload game record file"""
-    file = forms.FileField(widget=forms.FileInput())
+    file = forms.FileField(widget=forms.FileInput(), required=True)
 
 
 class GomokuRecordURLForm(forms.Form):
     """Form to pass url to the game record at playok.com"""
-    url = forms.CharField()
+    url = forms.URLField(widget=forms.URLInput(), required=True)
 
     def clean_url(self):
         """

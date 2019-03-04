@@ -39,13 +39,12 @@
 </style>
 {% endblock style %}
 {% block content %}
-    <h1>Your game list</h1>
-    <div class="list-group">
-        {% for obj in object_list %}
-            <a href="{{ obj.get_absolute_url }}" class="list-group-item list-group-item-action list-group-item-light">
-                {{ obj.black_player }} - {{ obj.white_player }}, {{ obj.game_date }}
-            </a>
-        {% endfor %}
+    <div id="game-record-list" class="list-group">
+{#        {% for obj in object_list %}#}
+{#            <a href="{{ obj.get_absolute_url }}" class="list-group-item list-group-item-action list-group-item-light">#}
+{#                {{ obj.black_player }} - {{ obj.white_player }}, {{ obj.game_date }}#}
+{#            </a>#}
+{#        {% endfor %}#}
 
     </div>
 
@@ -95,7 +94,8 @@
                 url: "/api/game_records",
                 method: "GET",
                 success: function(data){
-                    container.html(data);
+                    console.log(data);
+                    game_records_list(data);
                 },
                 error: function(data){
                     console.log("error");
@@ -103,40 +103,17 @@
                 }
             })
         }
+        
+        function game_records_list(data) {
+            $.each(data, function (k, v) {
+                console.log((v['game_record']));
 
-        {% comment %}function form_post_ajax() {
-            $(".my-list").submit(function(event) {
-                event.preventDefault();
-                var formData = new FormData();
-                formData.append( 'file', ($(this).find('[type=file]')[0].files[0]));
-                console.log(formData.file + "  THIS");
-                console.log(($(this).find('[type=file]')[0].files[0]) + "  file");
-                // var formData = this_.serialize();
-                console.log(formData);
-                $.ajax({
-                    enctype: 'multipart/form-data',
-                    type: "POST",
-                    url: "/api/v1/children/",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        console.log('no i co?');
-                        console.log(data);
-                        clear_field();
-                        ajax_list();
-                    },
-                    error: function (data) {
-                        console.log('error');
-                        console.log(data.statusText + "  ERROR STATUS TEXT");
-                        console.log(data + "  ERROR DATA")
-
-                    }
-                })
-            })
-        }{% endcomment %}
+                $('#game-record-list').append(
+                    "<a href='/gomoku/game/" + v["id"] + "' class='list-group-item list-group-item-action list-group-item-light game-record-item'>" +
+                    v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a>")
+            });
+        }
         ajax_list();
-        {#form_post_ajax();#}
     })
 
 </script>
