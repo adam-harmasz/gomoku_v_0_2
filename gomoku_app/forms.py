@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 
 from core.utils import check_domain
 
@@ -11,8 +10,7 @@ class GomokuRecordForm(forms.Form):
 
 class GomokuRecordURLForm(forms.Form):
     """Form to pass url to the game record at playok.com"""
-    url = forms.CharField(
-        help_text='Paste url to the game from kurnik.pl or playok.com')
+    url = forms.CharField()
 
     def clean_url(self):
         """

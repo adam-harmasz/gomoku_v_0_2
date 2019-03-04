@@ -34,11 +34,22 @@
                         <!-- Navbar Right Side -->
                         <div class="navbar-nav">
                             {% if user.is_authenticated %}
-                            <a class="nav-item nav-link" href="{{ user.userprofile.get_absolute_url }}">{{ user.username }}</a>
-                            <a class="nav-item nav-link" href="{% url 'accounts:logout' %}">Logout</a>
+                                <div class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ user.userprofile.get_absolute_url }}" role="button" aria-haspopup="true" aria-expanded="false">
+                                        {{ user.username }}
+                                    </a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="{{ user.userprofile.get_absolute_url }}">Profile</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'gomoku:game-list' %}">Game List</a>
+                                        <a class="dropdown-item" href="{% url 'gomoku_app:upload-file' %}">Upload Game</a>
+                                        <a class="dropdown-item" href="{% url 'gomoku:download-file' %}">Download Game</a>
+                                    </div>
+                                </div>
+                                <a class="nav-item nav-link" href="{% url 'accounts:logout' %}">Logout</a>
                             {% else %}
-                            <a class="nav-item nav-link" href="{% url 'accounts:login' %}">Login</a>
-                            <a class="nav-item nav-link" href="{% url 'accounts:register' %}">Register</a>
+                                <a class="nav-item nav-link" href="{% url 'accounts:login' %}">Login</a>
+                                <a class="nav-item nav-link" href="{% url 'accounts:register' %}">Register</a>
                             {% endif %}
                         </div>
                     </div>
