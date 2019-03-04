@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
+from core import models
+
 User = get_user_model()
 
 
@@ -48,3 +50,34 @@ class UserRegisterForm(forms.ModelForm):
             raise forms.ValidationError('Both password fields cannot be empty')
         if password != password2:
             raise ValidationError('Passwords don\'t match')
+
+
+class UserEditForm(forms.ModelForm):
+    """Form for editing user data"""
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'email')
+
+    def clean_email(self):
+        # email validation
+        email = self.cleaned_data['email']
+        if not email:
+            raise forms.ValidationError('Field cannot be empty')
+        qs = User.objects.filter(email=email)
+        if qs.exists ():
+            print ('email')
+            raise ValidationError(
+                f'that email address {email} is already taken')
+
+
+class UserProfileEditForm(forms.ModelForm):
+    """Form for editing user profile picture"""
+
+    class Meta:
+        model = models.UserProfile
+        fields = ('picture',)
+        widgets = {
+            'picture': forms.FileInput()
+        }

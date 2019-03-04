@@ -8,27 +8,39 @@
             <h2 class="account-heading">{{ user.username }}</h2>
             <p class="text-secondary">{{ user.email }}</p>
         </div>
-        <div class="info">
-            <p>
-                You can change your password
-                <a href="{% url 'accounts:password_change' %}">here</a>
-            </p>
-            <p>
-                Upload game record
-                <a href="{% url 'gomoku_app:upload-file' %}">here</a>
-            </p>
-            <p>
-                Download game here
-                <a href="{% url 'gomoku:download-file' %}">here</a>
-            </p>
-            <p>
-                Your saved game records are
-                <a href="{% url 'gomoku:game-list' %}"> here</a>
-            </p>
-        </div>
-    </div>
+
     <!-- FORM HERE -->
 </div>
+<!-- Modal Form for editing User profile-->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Edit Profile
+</button>
+
+<!-- Modal Form for editing User profile-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit your profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+             <form id="user-edit-form" method="PUT">
+                {% csrf_token %}
+                <fieldset class="form-group">
+{#                    <legend class="border-bottom mb-4">Edit profile</legend>#}
+                    {{ user_form|crispy }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-secondary" type="submit" value="Send e-mail">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+
 {% endblock content %}
 
 {% block jquery %}
@@ -37,20 +49,48 @@
         function clear_field() {
             $('#id_name').val('')
         }
+        console.log("/api/user/{{ user.id }}/");
+        $("#user-edit-form").submit(function (e) {
+                    e.preventDefault();
+                    var this_ = $(this),
+                        formData = this_.serialize();
 
-        function ajax_list() {
-            var container = $(".game-list");
-            $.ajax({
-                url: "/api/game_records",
-                method: "GET",
-                success: function(data){
-                    container.html(data);
-                },
-                error: function(data){
-                    console.log("error");
-                    console.log(data);
-                }
-            })
+                    $.ajax({
+                        url: "/api/user/{{ user.id }}/",
+                        data: formData,
+                        method: "PATCH",
+                        success: function (data) {
+                            console.log(data);
+
+                        },
+                        error: function (data) {
+                            console.log("error");
+                            console.log(data.statusText);
+                            console.log(data.status);
+                            console.log(data)
+                        }
+                    });
+                });
+
+        function ajax_user_edit_view() {
+            var submit_button = $("#user-edit"),
+                user_form = $("#user-edit-form");
+
+            submit_button.on('click', function () {
+                $.ajax({
+                    url: "/api/user/{{ user.id }}/",
+                    method: "POST",
+                    success: function(data){
+                        container.html(data);
+                    },
+                    error: function(data){
+                        console.log("error");
+                        console.log(data);
+
+                    }
+                });
+            });
+
         }
 
         {% comment %}function form_post_ajax() {
@@ -84,7 +124,7 @@
                 })
             })
         }{% endcomment %}
-        ajax_list();
+        {#ajax_list();#}
         {#form_post_ajax();#}
     })
 

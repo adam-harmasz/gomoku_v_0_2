@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import DetailView
 from django.contrib.auth import get_user_model
 
-from .forms import UserRegisterForm
+from . import forms
 from core import models
 
 User = get_user_model()
@@ -16,7 +16,7 @@ class RegisterView(View):
 
     def get(self, request):
         """function handling GET method"""
-        form = UserRegisterForm()
+        form = forms.UserRegisterForm()
         return render(
             request,
             'registration/registration_form.html',
@@ -24,7 +24,7 @@ class RegisterView(View):
 
     def post(self, request):
         """function handling POST method"""
-        form = UserRegisterForm(request.POST)
+        form = forms.UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
@@ -41,3 +41,11 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     """Detail view of user profile"""
     queryset = models.UserProfile.objects.all()
     template_name = 'accounts/profile.html'
+
+    def get_context_data(self, **kwargs):
+        """get user form"""
+        ctx = super(UserProfileView, self).get_context_data(**kwargs)
+        ctx['user_form'] = forms.UserEditForm()
+        ctx['userprofile_form'] = forms.UserProfileEditForm()
+        ctx['user'] = self.request.user
+        return ctx
