@@ -66,8 +66,8 @@ class UserEditForm(forms.ModelForm):
         if not email:
             raise forms.ValidationError('Field cannot be empty')
         qs = User.objects.filter(email=email)
-        if qs.exists ():
-            print ('email')
+        if qs.exists():
+            print('email')
             raise ValidationError(
                 f'that email address {email} is already taken')
 
@@ -81,3 +81,25 @@ class UserProfileEditForm(forms.ModelForm):
         widgets = {
             'picture': forms.FileInput()
         }
+
+
+class UserPasswordChangeForm(forms.ModelForm):
+    password = forms.CharField (required=True,
+                                label='Password',
+                                widget=forms.PasswordInput)
+    password2 = forms.CharField (required=True,
+                                 label='Repeat password',
+                                 widget=forms.PasswordInput, )
+
+    class Meta:
+        model = User
+        fields = ('password', 'password2')
+
+    def clean_password2(self):
+        password = self.cleaned_data['password']
+        password2 = self.cleaned_data['password2']
+        if not password or not password2:
+            raise forms.ValidationError(
+                'Both password fields cannot be empty')
+        if password != password2:
+            raise ValidationError('Passwords don\'t match')

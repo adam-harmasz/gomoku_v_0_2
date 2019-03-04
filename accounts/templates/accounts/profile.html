@@ -16,6 +16,9 @@
     <br />
     <br />
     {% include "accounts/modal_userprofile_edit.html" %}
+    <br />
+    <br />
+    {% include "accounts/modal_password_change.html" %}
 
     </div>
 {% endblock content %}
@@ -27,6 +30,27 @@
                 $('#id_name').val('')
             }
 
+             $("#password-change-form").submit(function (e) {
+                e.preventDefault();
+                var this_ = $(this),
+                    formData = this_.serialize();
+
+                $.ajax({
+                    url: "/api/user/{{ user.id }}/",
+                    data: formData,
+                    method: "PATCH",
+                    success: function (data) {
+                        console.log(data);
+
+                    },
+                    error: function (data) {
+                        console.log("error");
+                        console.log(data.statusText);
+                        console.log(data.status);
+                        console.log(data)
+                    }
+                });
+            });
 
             $("#user-edit-form").submit(function (e) {
                 e.preventDefault();

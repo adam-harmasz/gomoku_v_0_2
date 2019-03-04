@@ -48,4 +48,5 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         ctx['user_form'] = forms.UserEditForm()
         ctx['userprofile_form'] = forms.UserProfileEditForm()
         ctx['user'] = self.request.user
+        ctx['password_change_form'] = forms.UserPasswordChangeForm()
         return ctx
