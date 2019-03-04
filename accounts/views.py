@@ -43,7 +43,7 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     template_name = 'accounts/profile.html'
 
     def get_context_data(self, **kwargs):
-        """get user form"""
+        """adding user form, userprofile form and user context to the view"""
         ctx = super(UserProfileView, self).get_context_data(**kwargs)
         ctx['user_form'] = forms.UserEditForm()
         ctx['userprofile_form'] = forms.UserProfileEditForm()

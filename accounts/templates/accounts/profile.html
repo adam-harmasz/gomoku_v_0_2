@@ -1,132 +1,83 @@
 {% extends "core/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="content-section">
-    <div class="media">
-        <img class="rounded-circle account-img" src="{{ user.userprofile.picture.url }}">
-        <div class="media-body">
-            <h2 class="account-heading">{{ user.username }}</h2>
-            <p class="text-secondary">{{ user.email }}</p>
-        </div>
-
-    <!-- FORM HERE -->
-</div>
-<!-- Modal Form for editing User profile-->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Edit Profile
-</button>
-
-<!-- Modal Form for editing User profile-->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit your profile</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <div class="content-section">
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user.userprofile.picture.url }}">
+            <div class="media-body">
+                <h2 class="account-heading">{{ user.username }}</h2>
+                <p class="text-secondary">{{ user.email }}</p>
             </div>
-            <div class="modal-body">
-             <form id="user-edit-form" method="PUT">
-                {% csrf_token %}
-                <fieldset class="form-group">
-{#                    <legend class="border-bottom mb-4">Edit profile</legend>#}
-                    {{ user_form|crispy }}
-                </fieldset>
-                <div class="form-group">
-                    <button class="btn btn-secondary" type="submit" value="Send e-mail">Save changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    </div>
 
+        <!-- FORM HERE -->
+    </div>
+    <hr>
+    {% include "accounts/modal_user_edit.html" %}
+    <br />
+    <br />
+    {% include "accounts/modal_userprofile_edit.html" %}
+
+    </div>
 {% endblock content %}
 
 {% block jquery %}
     <script>
-    $(document).ready(function() {
-        function clear_field() {
-            $('#id_name').val('')
-        }
-        console.log("/api/user/{{ user.id }}/");
-        $("#user-edit-form").submit(function (e) {
-                    e.preventDefault();
-                    var this_ = $(this),
-                        formData = this_.serialize();
+        $(document).ready(function() {
+            function clear_field() {
+                $('#id_name').val('')
+            }
 
-                    $.ajax({
-                        url: "/api/user/{{ user.id }}/",
-                        data: formData,
-                        method: "PATCH",
-                        success: function (data) {
-                            console.log(data);
 
-                        },
-                        error: function (data) {
-                            console.log("error");
-                            console.log(data.statusText);
-                            console.log(data.status);
-                            console.log(data)
-                        }
-                    });
-                });
+            $("#user-edit-form").submit(function (e) {
+                e.preventDefault();
+                var this_ = $(this),
+                    formData = this_.serialize();
 
-        function ajax_user_edit_view() {
-            var submit_button = $("#user-edit"),
-                user_form = $("#user-edit-form");
-
-            submit_button.on('click', function () {
                 $.ajax({
                     url: "/api/user/{{ user.id }}/",
-                    method: "POST",
-                    success: function(data){
-                        container.html(data);
-                    },
-                    error: function(data){
-                        console.log("error");
+                    data: formData,
+                    method: "PATCH",
+                    success: function (data) {
                         console.log(data);
 
+                    },
+                    error: function (data) {
+                        console.log("error");
+                        console.log(data.statusText);
+                        console.log(data.status);
+                        console.log(data)
                     }
                 });
             });
 
-        }
-
-        {% comment %}function form_post_ajax() {
-            $(".my-list").submit(function(event) {
-                event.preventDefault();
+            $("#userprofile-edit-form").submit(function (e) {
+                e.preventDefault();
                 var formData = new FormData();
-                formData.append( 'file', ($(this).find('[type=file]')[0].files[0]));
-                console.log(formData.file + "  THIS");
-                console.log(($(this).find('[type=file]')[0].files[0]) + "  file");
-                // var formData = this_.serialize();
-                console.log(formData);
+
+                formData.append( 'picture', ($(this).find('[type=file]')[0].files[0]));
+                {#formData.append('_method', 'PATCH');#}
+
                 $.ajax({
                     enctype: 'multipart/form-data',
-                    type: "POST",
-                    url: "/api/v1/children/",
+                    url: "/api/profile/{{ user.id }}/",
                     data: formData,
+                    method: "PATCH",
                     processData: false,
                     contentType: false,
                     success: function (data) {
-                        console.log('no i co?');
                         console.log(data);
-                        clear_field();
-                        ajax_list();
                     },
                     error: function (data) {
-                        console.log('error');
-                        console.log(data.statusText + "  ERROR STATUS TEXT");
-                        console.log(data + "  ERROR DATA")
-
+                        console.log("error");
+                        console.log(data.statusText);
+                        console.log(data.status);
+                        console.log(data)
                     }
-                })
-            })
-        }{% endcomment %}
-        {#ajax_list();#}
-        {#form_post_ajax();#}
-    })
+                });
+            });
 
-</script>
+
+        });
+
+    </script>
 {% endblock jquery %}

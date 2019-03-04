@@ -45,3 +45,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = models.UserProfile
         fields = ('id', 'user', 'picture')
         read_only_fields = ('id',)
+
+
+class UserProfilePictureSerializer(serializers.ModelSerializer):
+    """Serializer for uploading images to user profile"""
+
+    class Meta:
+        model = models.UserProfile
+        fields = ('id', 'picture')
+        read_only_fields = ('id',)
