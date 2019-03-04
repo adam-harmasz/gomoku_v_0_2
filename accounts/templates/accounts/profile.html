@@ -27,9 +27,13 @@
 {% block jquery %}
     <script>
         $(document).ready(function() {
-            function clear_field() {
-                $('#id_name').val('')
+            function clear_field(selector) {
+                $(selector).text('')
             }
+
+            {#function clear_field(selector) {#}
+            {#    $(selector).val('')#}
+            {#}#}
 
              $("#password-change-form").submit(function (e) {
                 e.preventDefault();
@@ -68,10 +72,10 @@
                         ajax_get(url, change_profile_email);
                     },
                     error: function (data) {
-                        console.log("error");
-                        console.log(data.statusText);
-                        console.log(data.status);
-                        console.log(data)
+
+                        console.log(data.responseText);
+                        console.log(JSON.parse(data.responseText)['email'][0]);
+                        $("#passwordHelp").text(JSON.parse(data.responseText)['email'][0]);
                     }
                 });
             });
@@ -94,10 +98,9 @@
                         console.log(data);
                     },
                     error: function (data) {
-                        console.log("error");
-                        console.log(data.statusText);
-                        console.log(data.status);
-                        console.log(data)
+                        console.log(data.statusText + " statusText");
+                        console.log(data.status + " status");
+                        console.log(data.responseText);
                     }
                 });
             });
@@ -106,6 +109,7 @@
                  e.preventDefault();
                 var url = "/api/user/{{ user.id }}/";
                 ajax_get(url, fill_edit_form);
+                clear_field('#passwordHelp');
             });
 
             function ajax_get(url, success_func) {
@@ -131,6 +135,7 @@
 
             function change_profile_email(data) {
                 $("#p-email-id").text(data["email"]);
+                $("#p-name-id").text(data["first_name"]);
             }
 
         });

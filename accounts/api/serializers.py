@@ -1,7 +1,6 @@
 from rest_framework import serializers
-
 from django.contrib.auth import get_user_model
-from django.urls import reverse_lazy
+from rest_framework.validators import UniqueValidator
 
 from core import models
 
@@ -17,11 +16,20 @@ class UserSerializer(serializers.ModelSerializer):
         help_text='password needs to be at least 5 ',
         style={'input_type': 'password', 'placeholder': 'Password'}
     )
+    email = serializers.EmailField(validators=[UniqueValidator(
+        queryset=User.objects.all(),
+        message='That email address is already taken.'
+    )])
 
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'first_name', 'password')
         # extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
+        # validators = [UniqueTogetherValidator(
+        #     queryset=User.objects.all(),
+        #     fields='email',
+        #     message='Such email already exists'
+        # )]
 
     def create(self, validated_data):
         """create a new user with encrypted password and return it"""

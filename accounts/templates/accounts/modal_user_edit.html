@@ -17,6 +17,9 @@
             <div class="modal-body">
                  <form id="user-edit-form" method="PATCH">
                     {% csrf_token %}
+                     <small id="passwordHelp" class="text-danger">
+
+                    </small>
                     <fieldset class="form-group">
                         {{ user_form|crispy }}
                     </fieldset>
