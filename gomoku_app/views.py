@@ -41,7 +41,6 @@ class ExtractDataRedirectView(LoginRequiredMixin, View):
         return render(request, 'gomoku_app/gomoku_file_form.html', ctx)
 
 
-
 class DownloadExtractDataRedirectView(LoginRequiredMixin, View):
     """
     View which will download and unpack data from gomoku

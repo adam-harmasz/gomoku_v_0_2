@@ -22,7 +22,7 @@ class GomokuRecordURLForm(forms.Form):
         allowed_domains = ('https://www.kurnik.pl', 'https://www.playok.com')
         url = self.cleaned_data['url']
         print(check_domain(url))
-        if check_domain(url) in allowed_domains:
+        if check_domain(url) in allowed_domains and url[-3:] == 'txt':
             return url
         raise forms.ValidationError('Invalid url, only games from kurnik.pl'
                                         ' or playok.com are allowed')
