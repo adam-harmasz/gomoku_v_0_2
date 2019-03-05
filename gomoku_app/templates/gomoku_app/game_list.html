@@ -49,36 +49,36 @@
     </div>
 
     <hr>
-    {% if is_paginated %}
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                {% if page_obj.has_previous %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                    </li>
-                {% endif %}
-                {% for i in paginator.page_range %}
-                    {% if page_obj.number == i %}
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
-                        </li>
-                    {% else %}
-                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-                    {% endif %}
-                {% endfor %}
-                {% if page_obj.has_next %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
-                    </li>
-                {% endif %}
-
-            </ul>
-        </nav>
-    {% endif %}
+{#    {% if is_paginated %}#}
+{#        <nav aria-label="Page navigation example">#}
+{#            <ul class="pagination">#}
+{#                {% if page_obj.has_previous %}#}
+{#                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>#}
+{#                {% else %}#}
+{#                    <li class="page-item disabled">#}
+{#                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>#}
+{#                    </li>#}
+{#                {% endif %}#}
+{#                {% for i in paginator.page_range %}#}
+{#                    {% if page_obj.number == i %}#}
+{#                        <li class="page-item active" aria-current="page">#}
+{#                            <a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>#}
+{#                        </li>#}
+{#                    {% else %}#}
+{#                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>#}
+{#                    {% endif %}#}
+{#                {% endfor %}#}
+{#                {% if page_obj.has_next %}#}
+{#                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>#}
+{#                {% else %}#}
+{#                    <li class="page-item disabled">#}
+{#                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>#}
+{#                    </li>#}
+{#                {% endif %}#}
+{##}
+{#            </ul>#}
+{#        </nav>#}
+{#    {% endif %}#}
 {% endblock content %}
 
 {% block jquery %}
@@ -88,13 +88,14 @@
             $('#id_name').val('')
         }
 
-        function ajax_list() {
+        function ajax_list(url, success_func) {
             var container = $(".game-list");
             $.ajax({
-                url: "/api/game_records",
+                url: url,
                 method: "GET",
                 success: function(data){
-                    game_records_list(data);
+                    success_func(data);
+                    infinite_scroll(data['next']);
                 },
                 error: function(data){
                     console.log("error");
@@ -104,14 +105,53 @@
         }
         
         function game_records_list(data) {
-            $.each(data, function (k, v) {
+            $.each(data['results'], function (k, v) {
                 $('#game-record-list').append(
                     "<a href='/gomoku/game/" + v["id"] +
                     "' class='list-group-item list-group-item-action list-group-item-light game-record-item'>" +
                     v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a>")
             });
         }
-        ajax_list();
+
+        function infinite_scroll(next_url) {
+            var page = 1,
+                empty_page = false,
+                block_request = false,
+                container = $(".game-list");
+
+            console.log(next_url);
+            $(window).scroll(function() {
+                var margin = $(document).height() - $(window).height() - 200;
+                if ($(window).scrollTop() > margin && empty_page == false && block_request == false) {
+                    block_request = true;
+                    page += 1;
+                    url = next_url;
+
+                $.ajax({
+                    url: url,
+                    method: "GET",
+                    success: function(data){
+                        if(data['next'] == '') {
+                            console.log('the end!')
+                            empty_page = true;
+                        } else {
+                            block_request = false;
+                            game_records_list(data);
+                            next_url = data['next'];
+                            console.log(data['next'])
+                        }
+                    },
+                    error: function(data){
+                        console.log("error");
+                        console.log(data);
+                    }
+                })
+
+                }
+            });
+        }
+
+        ajax_list("/api/game_records", game_records_list);
     })
 
 </script>

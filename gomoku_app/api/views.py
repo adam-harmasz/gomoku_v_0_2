@@ -3,6 +3,7 @@ from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from rest_framework import permissions
 from django.contrib.auth import get_user_model
 
+from .pagination import StandardResultsPagination
 from . import serializers
 from core import models
 
@@ -14,3 +15,4 @@ class GomokuRecordViewset(viewsets.ModelViewSet):
     queryset = models.GomokuRecord.objects.all()
     serializer_class = serializers.GomokuRecordSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = StandardResultsPagination
