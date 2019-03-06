@@ -30,23 +30,20 @@
             function clear_field(selector) {
                 $(selector).text('')
             }
-
-            {#function clear_field(selector) {#}
-            {#    $(selector).val('')#}
-            {#}#}
+            function clear_html(selector) {
+                $(selector).html('')
+            }
 
              $("#password-change-form").submit(function (e) {
                 e.preventDefault();
                 var this_ = $(this),
                     formData = this_.serialize();
-
                 $.ajax({
                     url: "/api/user/{{ user.id }}/",
                     data: formData,
                     method: "PATCH",
                     success: function (data) {
                         console.log(data);
-
                     },
                     error: function (data) {
                         console.log("error");
@@ -62,31 +59,37 @@
                 var this_ = $(this),
                     formData = this_.serialize(),
                     url = "/api/user/{{ user.id }}/";
-
                 $.ajax({
                     url: url,
                     data: formData,
                     method: "PATCH",
                     success: function (data) {
                         console.log(data);
+                        // clearing alert messages
+                        clear_html("#email-edit-success");
+                        clear_html("#email-edit-error");
+                        // Alert success message
+                        $("#email-edit-success").append('<div class="alert alert-success" role="alert">Your profile has been successfully updated!</div>');
                         ajax_get(url, change_profile_email);
                     },
                     error: function (data) {
-
                         console.log(data.responseText);
-                        console.log(JSON.parse(data.responseText)['email'][0]);
-                        $("#passwordHelp").text(JSON.parse(data.responseText)['email'][0]);
+                        // clearing alert messages
+                        clear_html("#email-edit-success");
+                        clear_html("#email-edit-error");
+                        // Alert error message
+                        if (data.responseText === '{"email":["That email address is already taken."]}') {
+                            $("#email-edit-error").append('<div class="alert alert-danger" role="alert">' + JSON.parse(data.responseText).email[0] + '</div>');
+                        }
+
                     }
                 });
             });
-
             $("#userprofile-edit-form").submit(function (e) {
                 e.preventDefault();
                 var formData = new FormData();
-
                 formData.append( 'picture', ($(this).find('[type=file]')[0].files[0]));
                 {#formData.append('_method', 'PATCH');#}
-
                 $.ajax({
                     enctype: 'multipart/form-data',
                     url: "/api/profile/{{ user.userprofile.id }}/",
@@ -104,12 +107,12 @@
                     }
                 });
             });
-
             $('#user-edit-id').click(function (e) {
                  e.preventDefault();
                 var url = "/api/user/{{ user.id }}/";
                 ajax_get(url, fill_edit_form);
-                clear_field('#passwordHelp');
+                clear_html("#email-edit-success");
+                clear_html("#email-edit-error");
             });
 
             function ajax_get(url, success_func) {
@@ -127,7 +130,6 @@
                     }
                 });
             }
-
             function fill_edit_form(data) {
                 $("#id_first_name").val(data['first_name']);
                 $("#id_email").val(data['email']);
@@ -137,8 +139,6 @@
                 $("#p-email-id").text(data["email"]);
                 $("#p-name-id").text(data["first_name"]);
             }
-
         });
-
     </script>
 {% endblock jquery %}

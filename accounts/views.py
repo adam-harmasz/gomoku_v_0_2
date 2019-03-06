@@ -1,9 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views import View
-from django.views.generic import DetailView
-from django.contrib.auth import get_user_model
+from django.views.generic import DetailView, UpdateView
+from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth.forms import PasswordChangeForm
 
 from . import forms
 from core import models
@@ -55,3 +57,26 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         ctx['user'] = self.request.user
         ctx['password_change_form'] = forms.UserPasswordChangeForm()
         return ctx
+
+
+# class UserPasswordChangeView(View):
+#     """Changing user password"""
+#     def get(self, request):
+#         return HttpResponse('asd')
+#
+#     def post(self, request):
+#         form = forms.UserPasswordChangeForm(request.POST)
+#         print('jest w patchu')
+#         print(form)
+#         if form.is_valid():
+#             user = self.request.user
+#             cd = form.cleaned_data
+#             if authenticate(
+#                     username=user.username, password=cd['current_password']):
+#                 if cd['new_password'] == cd['re_new_password']:
+#                     user.set_password(cd['new_password'])
+#                     user.save()
+#                     return HttpResponse('password changed')
+#                 return HttpResponseBadRequest('password mismatch')
+#             return HttpResponseBadRequest('invalid current password')
+#         return HttpResponseBadRequest('form invalid')

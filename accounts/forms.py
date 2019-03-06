@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
 
 from core import models
@@ -61,7 +61,7 @@ class UserEditForm(forms.ModelForm):
         fields = ('first_name', 'email')
 
     def clean_email(self):
-        # email validation
+        """Email validation"""
         email = self.cleaned_data['email']
         if not email:
             raise forms.ValidationError('Field cannot be empty')
@@ -70,6 +70,13 @@ class UserEditForm(forms.ModelForm):
             print('email')
             raise ValidationError(
                 f'that email address {email} is already taken')
+
+    # def clean_password(self):
+    #     """Checking if password is valid for the user"""
+    #     user = self.request.user or self.user
+    #     password = self.cleaned_data['password']
+    #     if authenticate(username=user, password=password):
+    #         return password
 
 
 class UserProfileEditForm(forms.ModelForm):
@@ -83,21 +90,24 @@ class UserProfileEditForm(forms.ModelForm):
         }
 
 
-class UserPasswordChangeForm(forms.ModelForm):
-    password = forms.CharField (required=True,
-                                label='Password',
+class UserPasswordChangeForm(forms.Form):
+    current_password = forms.CharField(required=True,
+                                label='Current password',
                                 widget=forms.PasswordInput)
-    password2 = forms.CharField (required=True,
-                                 label='Repeat password',
+    new_password = forms.CharField (required=True,
+                                label='New password',
+                                widget=forms.PasswordInput)
+    re_new_password = forms.CharField (required=True,
+                                 label='Repeat new password',
                                  widget=forms.PasswordInput, )
 
     class Meta:
         model = User
-        fields = ('password', 'password2')
+        fields = ('current_password', 'new_password', 're_new_password')
 
     def clean_password2(self):
-        password = self.cleaned_data['password']
-        password2 = self.cleaned_data['password2']
+        password = self.cleaned_data['new_password']
+        password2 = self.cleaned_data['re_new_password']
         if not password or not password2:
             raise forms.ValidationError(
                 'Both password fields cannot be empty')

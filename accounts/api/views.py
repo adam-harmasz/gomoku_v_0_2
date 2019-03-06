@@ -1,7 +1,5 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
-from rest_framework.generics import UpdateAPIView
-from rest_framework.response import Response
+
 
 from django.contrib.auth import get_user_model
 from rest_framework import permissions
@@ -18,13 +16,25 @@ class UserViewset(viewsets.ModelViewSet):
     serializer_class = serializers.UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    # @action(detail=True, methods=['post'])
+    # def set_password(self, request, pk=None):
+    #     print('asdasd')
+    #     user = self.get_object()
+    #     serializer = serializers.UserPasswordChangeSerializer(
+    #         data=request.data)
+    #     print(serializer)
+    #     if serializer.is_valid():
+    #         user.set_password(serializer.data['password'])
+    #         user.save()
+    #         return Response({'status': 'password set'})
+    #     else:
+    #         print('bad request')
+    #         return Response(serializer.errors,
+    #                          status=status.HTTP_400_BAD_REQUEST)
+
 
 class UserProfileViewset(viewsets.ModelViewSet):
     """Profile objects Viewset"""
     queryset = models.UserProfile.objects.all()
     serializer_class = serializers.UserProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
-
-
-
-
