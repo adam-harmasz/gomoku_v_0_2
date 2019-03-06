@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, DeleteView
 
 from core import models
 from . import forms
@@ -89,3 +89,9 @@ class GameRecordDetailView(LoginRequiredMixin, DetailView):
     """View displaying list of gomoku games"""
     queryset = models.GomokuRecord.objects.all()
     template_name = 'gomoku_app/game_detail.html'
+
+
+# class GameRecordDeleteView(LoginRequiredMixin, DeleteView):
+#     """Delete game record View"""
+#     queryset = models.GomokuRecord.objects.all()
+

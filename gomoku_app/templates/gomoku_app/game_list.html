@@ -39,7 +39,11 @@
 </style>
 {% endblock style %}
 {% block content %}
-    <div id="game-record-list" class="list-group"></div>
+{#    <div id="game-record-list" class="list-group"></div>#}
+    <div class="container">
+        <div id="game-record-list" class="row">
+        </div>
+    </div>
 {% endblock content %}
 
 {% block jquery %}
@@ -67,12 +71,42 @@
         
         function game_records_list(data) {
             $.each(data['results'], function (k, v) {
-                $('#game-record-list').append(
-                    "<a href='/gomoku/game/" + v["id"] +
+                var a_element =  "<div class=\"col col-lg-9\"><a href='/gomoku/game/" + v["id"] +
                     "' class='list-group-item list-group-item-action list-group-item-light game-record-item'>" +
-                    v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a>")
+                    v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a></div>" +
+                    "<div class=\"col\"><a href=\"#\" class=\"list-group-item list-group-item-action list-group-item-light\ delete-game-class\" data-id=" +
+                    v["id"] + " >Delete</a></div>" + "<div class=\"w-100\"></div>\n";
+                $("#game-record-list").append(a_element);
+            });
+            delete_game_record();
+        }
+
+        // Delete on click add event on button
+        function delete_game_record () {
+            $('.delete-game-class').click(function (e) {
+                e.preventDefault();
+                var this_ = $(this),
+                    game_record_id = this_.data("id");
+	            console.log(this_.data("id"));
+
+	            $.ajax({
+                    url: "/api/game_records/" + game_record_id + "/",
+                    method: "DELETE",
+                    success: function(data){
+                        console.log('Deleted');
+                        // clear list before update
+                        $("#game-record-list").html('');
+                        // update game list
+                        ajax_list("/api/game_records", game_records_list);
+                    },
+                    error: function(data){
+                        console.log("error");
+                        console.log(data.statusText);
+                    }
+                })
             });
         }
+
 
         function infinite_scroll(next_url) {
             var page = 1,

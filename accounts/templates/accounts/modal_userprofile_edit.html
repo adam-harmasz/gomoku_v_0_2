@@ -6,7 +6,7 @@
 
 <!-- Modal Form for editing User profile-->
 <div class="modal fade" id="userprofile-edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Edit your picture</h5>
@@ -25,7 +25,6 @@
                         {{ userprofile_form|crispy }}
                         <small>Allowed formats: jpg, jpeg, gif</small>
                     </fieldset>
-
                     <div class="form-group">
                         <button class="btn btn-secondary" type="submit" value="Send e-mail">Save changes</button>
                     </div>
