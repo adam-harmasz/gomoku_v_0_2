@@ -1,6 +1,6 @@
 {% load crispy_forms_tags %}
 <!-- Modal Form for editing User profile-->
-<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#userprofile-edit">
+<button id="user-edit-picture-id" type="button" class="btn btn-secondary" data-toggle="modal" data-target="#userprofile-edit">
     Edit Picture
 </button>
 
@@ -17,6 +17,10 @@
             <div class="modal-body">
                  <form id="userprofile-edit-form" method="PATCH" enctype="multipart/form-data">
                     {% csrf_token %}
+                     <div id="pic-edit-success">
+                    </div>
+                    <div id="pic-edit-error">
+                    </div>
                     <fieldset class="form-group">
                         {{ userprofile_form|crispy }}
                     </fieldset>

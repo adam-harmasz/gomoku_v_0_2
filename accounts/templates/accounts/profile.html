@@ -3,7 +3,7 @@
 {% block content %}
     <div class="content-section">
         <div class="media">
-            <img class="rounded-circle account-img" src="{{ user.userprofile.picture.url }}">
+            <img id="profile-pic" class="rounded-circle account-img" src="{{ user.userprofile.picture.url }}">
             <div class="media-body">
                 <h2 class="account-heading">{{ user.username }}</h2>
                 <p id="p-name-id" class="text-secondary">{{ user.first_name }}</p>
@@ -32,33 +32,38 @@
 {% block jquery %}
     <script>
         $(document).ready(function() {
+            // remove text from the html tag
             function clear_field(selector) {
                 $(selector).text('')
             }
+
+            // remove added html tags from the chosen html tag
             function clear_html(selector) {
                 $(selector).html('')
             }
 
-             $("#password-change-form").submit(function (e) {
-                e.preventDefault();
-                var this_ = $(this),
-                    formData = this_.serialize();
-                $.ajax({
-                    url: "/api/user/{{ user.id }}/",
-                    data: formData,
-                    method: "PATCH",
-                    success: function (data) {
-                        console.log(data);
-                    },
-                    error: function (data) {
-                        console.log("error");
-                        console.log(data.statusText);
-                        console.log(data.status);
-                        console.log(data)
-                    }
-                });
-            });
 
+            {# $("#password-change-form").submit(function (e) {#}
+            {#    e.preventDefault();#}
+            {#    var this_ = $(this),#}
+            {#        formData = this_.serialize();#}
+            {#    $.ajax({#}
+            {#        url: "/api/user/{{ user.id }}/",#}
+            {#        data: formData,#}
+            {#        method: "PATCH",#}
+            {#        success: function (data) {#}
+            {#            console.log(data);#}
+            {#        },#}
+            {#        error: function (data) {#}
+            {#            console.log("error");#}
+            {#            console.log(data.statusText);#}
+            {#            console.log(data.status);#}
+            {#            console.log(data)#}
+            {#        }#}
+            {#    });#}
+            {# }); #}
+
+            // Edit user data with ajax submit
             $("#user-edit-form").submit(function (e) {
                 e.preventDefault();
                 var this_ = $(this),
@@ -75,7 +80,8 @@
                         clear_html("#email-edit-error");
                         // Alert success message
                         $("#email-edit-success").append('<div class="alert alert-success" role="alert">Your profile has been successfully updated!</div>');
-                        ajax_get(url, change_profile_email);
+                        // Update user data in the profile template
+                        ajax_get(url, change_profile_data);
                     },
                     error: function (data) {
                         console.log(data.responseText);
@@ -90,20 +96,30 @@
                     }
                 });
             });
+
+            // Edit user profile picture with ajax submit
             $("#userprofile-edit-form").submit(function (e) {
                 e.preventDefault();
-                var formData = new FormData();
+                var formData = new FormData(),
+                    url = "/api/profile/{{ user.userprofile.id }}/";
+
                 formData.append( 'picture', ($(this).find('[type=file]')[0].files[0]));
-                {#formData.append('_method', 'PATCH');#}
+
                 $.ajax({
                     enctype: 'multipart/form-data',
-                    url: "/api/profile/{{ user.userprofile.id }}/",
+                    url: url,
                     data: formData,
                     method: "PATCH",
                     processData: false,
                     contentType: false,
                     success: function (data) {
                         console.log(data);
+                        clear_html("#pic-edit-success");
+                        clear_html("#pic-edit-error");
+                        // success alert message
+                        $("#pic-edit-success").append('<div class="alert alert-success" role="alert">Your profile picture has been successfully updated!</div>');
+                        // update profile picture
+                        ajax_get(url, change_profile_picture);
                     },
                     error: function (data) {
                         console.log(data.statusText + " statusText");
@@ -112,6 +128,7 @@
                     }
                 });
             });
+
             $('#user-edit-id').click(function (e) {
                  e.preventDefault();
                 var url = "/api/user/{{ user.id }}/";
@@ -120,13 +137,38 @@
                 clear_html("#email-edit-error");
             });
 
+            $('#user-edit-picture-id').click(function (e) {
+                 e.preventDefault();
+                var url = "/api/profile/{{ user.userprofile.id }}/";
+                ajax_get_img(url, change_profile_picture);
+                clear_html("#pic-edit-success");
+                clear_html("#pic-edit-error");
+            });
+
+            function ajax_get_img(url, success_func) {
+                $.ajax({
+                    url: url,
+                    method: "GET",
+                    processData: false,
+                    contentType: false,
+
+                    success: function(data){
+                        console.log(data.picture);
+                        success_func(data);
+                    },
+                    error: function(data){
+                        console.log("error img ajax");
+                        console.log(data);
+                    }
+                });
+            }
+
             function ajax_get(url, success_func) {
                 $.ajax({
                     url: url,
                     method: "GET",
                     success: function(data){
-                        console.log(data['first_name']);
-                        console.log(data['email']);
+                        console.log(data);
                         success_func(data);
                     },
                     error: function(data){
@@ -135,14 +177,19 @@
                     }
                 });
             }
+
             function fill_edit_form(data) {
                 $("#id_first_name").val(data['first_name']);
                 $("#id_email").val(data['email']);
             }
 
-            function change_profile_email(data) {
+            function change_profile_data(data) {
                 $("#p-email-id").text(data["email"]);
                 $("#p-name-id").text(data["first_name"]);
+            }
+
+            function change_profile_picture(data) {
+                $("#profile-pic").attr("src", data.picture);
             }
         });
     </script>
