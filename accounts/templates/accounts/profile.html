@@ -79,7 +79,8 @@
                         clear_html("#email-edit-success");
                         clear_html("#email-edit-error");
                         // Alert success message
-                        $("#email-edit-success").append('<div class="alert alert-success" role="alert">Your profile has been successfully updated!</div>');
+                        $("#email-edit-success").append(
+                            '<div class="alert alert-success" role="alert">Your profile has been successfully updated!</div>');
                         // Update user data in the profile template
                         ajax_get(url, change_profile_data);
                     },
@@ -90,7 +91,8 @@
                         clear_html("#email-edit-error");
                         // Alert error message
                         if (data.responseText === '{"email":["That email address is already taken."]}') {
-                            $("#email-edit-error").append('<div class="alert alert-danger" role="alert">' + JSON.parse(data.responseText).email[0] + '</div>');
+                            $("#email-edit-error").append(
+                                '<div class="alert alert-danger" role="alert">' + JSON.parse(data.responseText).email[0] + '</div>');
                         }
 
                     }
@@ -114,6 +116,7 @@
                     contentType: false,
                     success: function (data) {
                         console.log(data);
+                        // clearing alert messages
                         clear_html("#pic-edit-success");
                         clear_html("#pic-edit-error");
                         // success alert message
@@ -122,9 +125,15 @@
                         ajax_get(url, change_profile_picture);
                     },
                     error: function (data) {
-                        console.log(data.statusText + " statusText");
                         console.log(data.status + " status");
                         console.log(data.responseText);
+                        // Clearing alert messages
+                        clear_html("#pic-edit-success");
+                        clear_html("#pic-edit-error");
+                        // Adding alert error message
+                        $("#pic-edit-error").append(
+                            '<div class="alert alert-danger" role="alert">' + JSON.parse(data.responseText).non_field_errors[0] + '</div>');
+
                     }
                 });
             });

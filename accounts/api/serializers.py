@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
+import re
 
 from core import models
 
@@ -64,6 +65,18 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = models.UserProfile
         fields = ('id', 'user', 'picture')
         read_only_fields = ('id',)
+
+    def validate(self, attrs):
+        """picture image validation"""
+        allowed_formats = ('jpg', 'jpeg', 'gif')
+        regex = r'([.]jpg$)|([.]jpeg$)|([.]gif$)'
+        pic = str(attrs['picture'])
+        pic_check = re.search(regex, pic)
+        print(pic_check)
+        if pic_check:
+            return attrs
+        raise serializers.ValidationError(
+            'Invalid format of the file, allowed formats: jpg, jpeg, gif')
 
 
 class UserProfilePictureSerializer(serializers.ModelSerializer):
