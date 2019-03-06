@@ -53,13 +53,14 @@
             $('#id_name').val('')
         }
 
-        function ajax_list(url, success_func) {
+        function ajax_list(url=null, success_func=null) {
             var container = $(".game-list");
             $.ajax({
                 url: url,
                 method: "GET",
                 success: function(data){
                     success_func(data);
+                    $(window).off("scroll");
                     infinite_scroll(data['next']);
                 },
                 error: function(data){
@@ -69,13 +70,13 @@
             })
         }
         
-        function game_records_list(data) {
+        function game_records_list(data=false) {
             $.each(data['results'], function (k, v) {
-                var a_element =  "<div class=\"col col-lg-9\"><a href='/gomoku/game/" + v["id"] +
+                var a_element =  "<div id=\"div-players-" + v["id"] + "\" class=\"col col-lg-9\"><a href='/gomoku/game/" + v["id"] +
                     "' class='list-group-item list-group-item-action list-group-item-light game-record-item'>" +
                     v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a></div>" +
-                    "<div class=\"col\"><a href=\"#\" class=\"list-group-item list-group-item-action list-group-item-light\ delete-game-class\" data-id=" +
-                    v["id"] + " >Delete</a></div>" + "<div class=\"w-100\"></div>\n";
+                    "<div id=\"div-delete-" + v["id"] + "\" class=\"col\"><a href=\"#\" class=\"list-group-item list-group-item-action list-group-item-light\ delete-game-class\" data-id=" +
+                    v["id"] + " >Delete</a></div>" + "<div id=\"div-w-100-" + v["id"] + "\" class=\"w-100\"></div>\n";
                 $("#game-record-list").append(a_element);
             });
             delete_game_record();
@@ -94,10 +95,10 @@
                     method: "DELETE",
                     success: function(data){
                         console.log('Deleted');
-                        // clear list before update
-                        $("#game-record-list").html('');
-                        // update game list
-                        ajax_list("/api/game_records", game_records_list);
+                        console.log(data);
+                        $( "div" ).remove( "#div-players-" + game_record_id );
+                        $( "div" ).remove( "#div-delete-" + game_record_id );
+                        $( "div" ).remove( "#div-w-100-" + game_record_id );
                     },
                     error: function(data){
                         console.log("error");
@@ -107,14 +108,13 @@
             });
         }
 
-
-        function infinite_scroll(next_url) {
+        // function to enable loading next pages in pagination by scrolling down
+        function infinite_scroll(next_url=null) {
             var page = 1,
                 empty_page = false,
                 block_request = false,
                 container = $(".game-list");
 
-            console.log(next_url);
             $(window).scroll(function() {
                 var margin = $(document).height() - $(window).height() - 200;
                 if ($(window).scrollTop() > margin && empty_page == false && block_request == false) {
@@ -146,7 +146,6 @@
             });
         }
         ajax_list("/api/game_records", game_records_list);
-    })
-
+    });
 </script>
 {% endblock jquery %}
