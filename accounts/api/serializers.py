@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, EmptyPage
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
@@ -22,41 +23,32 @@ class UserSerializer(serializers.ModelSerializer):
         queryset=User.objects.all(),
         message='That email address is already taken.'
     )])
-    users_games = GomokuRecordSerializer(read_only=True, many=True)
+    users_games = serializers.SerializerMethodField('paginated_users_games')
+    # users_games = GomokuRecordSerializer(read_only=True, many=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'password', 'users_games')
+        fields = ('id',
+                  'username',
+                  'email',
+                  'first_name',
+                  'password',
+                  'users_games')
 
     def create(self, validated_data):
         """create a new user with encrypted password and return it"""
         return User.objects.create_user(**validated_data)
 
-    # def update(self, instance, validated_data):
-    #     """Update a user, setting the password correctly and return it"""
-    #     print(validated_data)
-    #     password = validated_data.pop('password', None)
-    #     user = super().update(instance, validated_data)
-    #     print(user)
-    #     if authenticate(username=user, password=password):
-    #         return user
-    #     raise serializers.ValidationError("Invalid password")
-
-    # def validate(self, attrs):
-    #     print(attrs)
-    #     password = attrs['password']
-    #     request = self.context.get('request')
-    #     user = request.user
-    #     print(user)
-    #     user = authenticate(
-    #         request=self.context.get('request'),
-    #         username=user,
-    #         password=password
-    #     )
-    #     if not user:
-    #         raise serializers.ValidationError('Wrong password',
-    #                                           code='authentication')
-    #     return attrs
+    def paginated_users_games(self, obj):
+        try:
+            page_size = self.context['request'].query_params.get('size') or 20
+            paginator = Paginator(obj.users_games.all(), page_size)
+            page = self.context['request'].query_params.get('page') or 1
+            words_in_book = paginator.page(page)
+            serializer = GomokuRecordSerializer(words_in_book, many=True)
+            return serializer.data
+        except EmptyPage:
+            raise serializers.ValidationError("no further content")
 
 
 class UserProfileSerializer(serializers.ModelSerializer):

@@ -64,6 +64,7 @@
                 url: url,
                 method: "GET",
                 success: function(data){
+                    console.log(data);
                     success_func(data);
                     $(window).off("scroll");
                     infinite_scroll(data['next']);
@@ -77,9 +78,7 @@
 
         // building html list of game records
         function game_records_list(data=false) {
-            console.log(data.users_games);
             $.each(data.users_games, function (k, v) {
-                console.log(k, v);
                 var a_element =  "<div id=\"div-players-" + v["id"] + "\" class=\"col col-lg-9\"><a href='/gomoku/game/" + v["id"] +
                     "' class='list-group-item list-group-item-action list-group-item-light game-record-item'>" +
                     v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a></div>" +
@@ -151,14 +150,14 @@
                 if ($(window).scrollTop() > margin && empty_page == false && block_request == false) {
                     block_request = true;
                     page += 1;
-                    url = next_url;
+                    url = "/api/user/{{ user.id }}/?page=" + page;
 
                     // getting next page from the back end with ajax
                     $.ajax({
                         url: url,
                         method: "GET",
                         success: function(data){
-                            if(next_url == null) {
+                            if(data == "") {
                                 console.log('the end!');
                                 empty_page = true;
                             } else {

@@ -4,6 +4,7 @@ from rest_framework import viewsets, status
 from django.contrib.auth import get_user_model
 from rest_framework import permissions
 
+from gomoku_app.api.pagination import StandardResultsPagination
 from core import models
 from . import serializers
 
