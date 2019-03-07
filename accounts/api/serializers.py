@@ -57,7 +57,6 @@ class UserSerializer(serializers.ModelSerializer):
     #     return attrs
 
 
-
 class UserProfileSerializer(serializers.ModelSerializer):
     """Serializer for the profile objects"""
 

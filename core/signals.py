@@ -21,7 +21,6 @@ def create_gomoku_record_object(sender, instance, created, **kwargs):
                 filename=f'config/media/{instance.game_record_file}'
             )
         elif instance.status == 'url':
-            print(instance.url, 'JESTEM')
             payload = extract_data_from_game_record_file(
                 url=instance.url
             )

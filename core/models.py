@@ -108,7 +108,7 @@ class GomokuRecordFile(models.Model):
         blank=True,
         upload_to=gomoku_record_image_file_path
     )
-    url = models.CharField(default=None, max_length=255, null=True, blank=True)
+    url = models.CharField(max_length=255, null=True, blank=True)
     status = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):

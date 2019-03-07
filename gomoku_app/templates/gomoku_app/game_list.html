@@ -230,6 +230,58 @@
                 }
             });
         });
+
+        // Download game from the kurnik/playok website and add to the list
+        $("#game-download-form").submit(function (e) {
+            e.preventDefault();
+            var this_ = $(this),
+                formData = this_.serialize(),
+                game_download_error = $("#game-download-error"),
+                game_download_success = $("#game-delete-success"),
+                url = "/api/files/";
+
+            $.ajax({
+                url: url,
+                data: formData,
+                method: "POST",
+                success: function (data) {
+                    console.log(data);
+                    // clearing alert messages
+                    game_download_success.html("");
+
+                    // success alert message
+                    game_download_success.append("<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
+                            "  <strong>Game has been successfully added to your list</strong> \n" +
+                            "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
+                            "    <span aria-hidden=\"true\">&times;</span>\n" +
+                            "  </button>\n" +
+                            "</div>");
+
+                    // silence submit event
+                    $("#download-modal").modal("hide");
+                    // clear value from the form input
+                    $("input#id_url").val("");
+                    // clear game record list
+                     $("#game-record-list").html("");
+                    // update profile picture
+                    ajax_list("/api/game_records", game_records_list);
+                },
+                error: function (data) {
+                    console.log(data.status + " status");
+                    console.log(data.responseText);
+                    console.log(data);
+
+                    // Clearing alert messages
+                    game_download_success.html("");
+                    game_download_error.html("");
+
+                    // Adding alert error message
+                    game_download_error.append(
+                        '<div class="alert alert-danger" role="alert">' + JSON.parse(data.responseText).url[0] + '</div>');
+                }
+            });
+        });
+
         ajax_list("/api/game_records", game_records_list);
     });
 </script>

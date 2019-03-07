@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
 from core import models
+from core.utils import check_domain
 
 User = get_user_model()
 
@@ -27,6 +28,7 @@ class GomokuRecordFileSerializer(serializers.ModelSerializer):
         if status is None:
             raise serializers.ValidationError('Status must be url or file')
         return models.GomokuRecordFile.objects.create(
+            url=url,
             profile=user,
             status=status,
             game_record_file=game_record_file)
@@ -40,5 +42,9 @@ class GomokuRecordFileSerializer(serializers.ModelSerializer):
 
     def validate_url(self, attrs):
         """File validation"""
-        print(attrs)
-        return attrs
+        allowed_domains = ('https://www.kurnik.pl', 'https://www.playok.com')
+        print(check_domain(attrs))
+        if check_domain(attrs) in allowed_domains and attrs[-3:] == 'txt':
+            return attrs
+        raise serializers.ValidationError('Invalid url, only games from kurnik.pl'
+                                     ' or playok.com are allowed')
