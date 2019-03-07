@@ -70,7 +70,9 @@ class Player(models.Model):
 
 class GomokuRecord(models.Model):
     """Class defining gomoku record object"""
-    profile = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(User,
+                                on_delete=models.CASCADE,
+                                related_name='users_games')
     game_record = models.TextField()
     game_date = models.DateTimeField()
     black_player = models.ForeignKey(

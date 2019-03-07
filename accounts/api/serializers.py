@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
 import re
 
+from gomoku_app.api.serializers import GomokuRecordSerializer
 from core import models
 
 User = get_user_model()
@@ -21,10 +22,11 @@ class UserSerializer(serializers.ModelSerializer):
         queryset=User.objects.all(),
         message='That email address is already taken.'
     )])
+    users_games = GomokuRecordSerializer(read_only=True, many=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'password')
+        fields = ('id', 'username', 'email', 'first_name', 'password', 'users_games')
 
     def create(self, validated_data):
         """create a new user with encrypted password and return it"""

@@ -77,7 +77,9 @@
 
         // building html list of game records
         function game_records_list(data=false) {
-            $.each(data['results'], function (k, v) {
+            console.log(data.users_games);
+            $.each(data.users_games, function (k, v) {
+                console.log(k, v);
                 var a_element =  "<div id=\"div-players-" + v["id"] + "\" class=\"col col-lg-9\"><a href='/gomoku/game/" + v["id"] +
                     "' class='list-group-item list-group-item-action list-group-item-light game-record-item'>" +
                     v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a></div>" +
@@ -213,7 +215,7 @@
                     // clear game record list
                      $("#game-record-list").html("");
                     // update profile picture
-                    ajax_list("/api/game_records", game_records_list);
+                    ajax_list("/api/user/{{ user.id }}", game_records_list);
                 },
                 error: function (data) {
                     console.log(data.status + " status");
@@ -264,7 +266,7 @@
                     // clear game record list
                      $("#game-record-list").html("");
                     // update profile picture
-                    ajax_list("/api/game_records", game_records_list);
+                    ajax_list("/api/user/{{ user.id }}", game_records_list);
                 },
                 error: function (data) {
                     console.log(data.status + " status");
@@ -282,7 +284,7 @@
             });
         });
 
-        ajax_list("/api/game_records", game_records_list);
+        ajax_list("/api/user/{{ user.id }}", game_records_list);
     });
 </script>
 {% endblock jquery %}
