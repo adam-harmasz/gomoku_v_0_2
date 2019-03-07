@@ -39,7 +39,27 @@
 </style>
 {% endblock style %}
 {% block content %}
-{#    <div id="game-record-list" class="list-group"></div>#}
+    <div id="game-delete-success">
+    </div>
+    <!-- Modal -->
+    <div class="modal fade bd-example-modal-sm" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Game Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Do you want to delete this game? Press "Confirm" button to continue.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary delete-game-class"  data-dismiss="modal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div id="game-record-list" class="row">
         </div>
@@ -75,36 +95,59 @@
                 var a_element =  "<div id=\"div-players-" + v["id"] + "\" class=\"col col-lg-9\"><a href='/gomoku/game/" + v["id"] +
                     "' class='list-group-item list-group-item-action list-group-item-light game-record-item'>" +
                     v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a></div>" +
-                    "<div id=\"div-delete-" + v["id"] + "\" class=\"col\"><a href=\"#\" class=\"list-group-item list-group-item-action list-group-item-light\ delete-game-class\" data-id=" +
-                    v["id"] + " >Delete</a></div>" + "<div id=\"div-w-100-" + v["id"] + "\" class=\"w-100\"></div>\n";
+                    "<div id=\"div-delete-" + v["id"] + "\" class=\"col\"><a href=\"#\" class=\"list-group-item list-group-item-action list-group-item-light\ delete-game-data\" data-id=" +
+                    v["id"] + " data-toggle=\"modal\" data-target=\"#delete-modal\" >Delete</a></div>" + "<div id=\"div-w-100-" + v["id"] + "\" class=\"w-100\"></div>\n";
                 $("#game-record-list").append(a_element);
             });
             delete_game_record();
         }
 
-        // Delete on click add event on button
-        function delete_game_record () {
-            $('.delete-game-class').click(function (e) {
-                e.preventDefault();
-                var this_ = $(this),
-                    game_record_id = this_.data("id");
-	            console.log(this_.data("id"));
+        // Function to pass id value to delete_game_record function
 
+        function delete_game_record() {
+            $(".delete-game-data").click(function (e) {
+                e.preventDefault();
+                var game_record_id = $(this).data('id');
+                console.log(game_record_id + "   game record id");
+                $('.delete-game-class').off("click");
+                perform_delete_game_record(game_record_id);
+            });
+        }
+
+        // Delete on click add event on button
+        function perform_delete_game_record (id=null) {
+            var delete_html_elem = $('.delete-game-class');
+
+            delete_html_elem.click(function (e) {
+                e.preventDefault();
+                var game_delete_success = $("#game-delete-success"),
+                    div_elem = $("div");
+	            console.log(id);
 	            $.ajax({
-                    url: "/api/game_records/" + game_record_id + "/",
+                    url: "/api/game_records/" + id + "/",
                     method: "DELETE",
                     success: function(data){
                         console.log('Deleted');
                         console.log(data);
-                        $( "div" ).remove( "#div-players-" + game_record_id );
-                        $( "div" ).remove( "#div-delete-" + game_record_id );
-                        $( "div" ).remove( "#div-w-100-" + game_record_id );
+                        // clear all not dismissed messages
+                         game_delete_success.html("");
+                        // delete html elements from deleted game record
+                        div_elem.remove( "#div-players-" + id );
+                        div_elem.remove( "#div-delete-" + id );
+                        div_elem.remove( "#div-w-100-" + id );
+                        // success alert
+                        game_delete_success.append("<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
+                            "  <strong>Game has been successfully deleted.</strong> \n" +
+                            "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
+                            "    <span aria-hidden=\"true\">&times;</span>\n" +
+                            "  </button>\n" +
+                            "</div>");
                     },
                     error: function(data){
                         console.log("error");
                         console.log(data.statusText);
                     }
-                })
+                 });
             });
         }
 
