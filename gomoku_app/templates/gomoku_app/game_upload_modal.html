@@ -1,0 +1,33 @@
+{% load crispy_forms_tags %}
+<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#upload-modal">
+    Upload game from the file
+</button>
+
+<!-- Modal Form for editing User profile-->
+<div class="modal fade" id="upload-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit your picture</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                 <form id="game-upload-form" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div id="game-upload-success">
+                    </div>
+                    <div id="game-upload-error">
+                    </div>
+                    <fieldset class="form-group">
+                        {{ upload_form|crispy }}
+                    </fieldset>
+                    <div class="form-group">
+                        <button class="btn btn-secondary" type="submit" value="Send e-mail">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
