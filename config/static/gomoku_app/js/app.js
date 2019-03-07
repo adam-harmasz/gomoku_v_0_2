@@ -154,7 +154,7 @@ $(document).ready(function () {
     }
 
 
-    // show all moves at once
+        // show all moves at once
         function last_move() {
             var last_button = $('#end');
 
@@ -198,7 +198,7 @@ $(document).ready(function () {
             silence_last_move();
             next_move();
             last_move();
-            silence_voard_clear();
+            silence_board_clear();
         });
     }
 
@@ -258,6 +258,7 @@ $(document).ready(function () {
                 }
                 if (move === game_record_list.length) {
                     silence_last_move();
+                    silence_next_move();
                 } else {
                     last_move();
                     silence_next_move();
@@ -266,6 +267,8 @@ $(document).ready(function () {
             }
             silence_undo_move();
             undo_move();
+            silence_board_clear();
+            board_clear();
         });
     }
 
@@ -283,7 +286,7 @@ $(document).ready(function () {
         $('#end').off('click');
     }
 
-    function silence_voard_clear() {
+    function silence_board_clear() {
         $('#clear').off('click');
     }
 
