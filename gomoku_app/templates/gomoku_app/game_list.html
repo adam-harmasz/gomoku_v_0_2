@@ -176,10 +176,14 @@
                 }
             });
         }
+
+
         // Edit user profile picture with ajax submit
         $("#game-upload-form").submit(function (e) {
             e.preventDefault();
             var formData = new FormData(),
+                game_upload_error = $("#game-upload-error"),
+                game_upload_success = $("#game-upload-success"),
                 url = "/api/files/";
 
             formData.append("game_record_file", ($(this).find('[type=file]')[0].files[0]));
@@ -195,14 +199,25 @@
                     console.log(data);
 
                     // clearing alert messages
-                    {#clear_html("#pic-edit-success");#}
-                    {#clear_html("#pic-edit-error");#}
+                    game_upload_error.html('');
+                    game_upload_success.html('');
 
                     // success alert message
-                    $("#pic-edit-success").append('<div class="alert alert-success" role="alert">Your profile picture has been successfully updated!</div>');
+                    $("#game-delete-success").append("<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
+                            "  <strong>Game has been successfully added to your list</strong> \n" +
+                            "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
+                            "    <span aria-hidden=\"true\">&times;</span>\n" +
+                            "  </button>\n" +
+                            "</div>");
 
                     // update profile picture
                     {#ajax_get(url, change_profile_picture);#}
+
+                    // silence submit event
+                    $("#upload-modal").modal("hide");
+
+                    // clear value from the form input
+                    $("input#id_file").val("")
                 },
                 error: function (data) {
                     console.log(data.status + " status");
@@ -210,17 +225,15 @@
                     console.log(data);
 
                     // Clearing alert messages
-                    {#clear_html("#pic-edit-success");#}
-                    {#clear_html("#pic-edit-error");#}
+                    game_upload_success.html();
+                    game_upload_error.html('');
 
                     // Adding alert error message
-                    {#$("#pic-edit-error").append(#}
-                    {#    '<div class="alert alert-danger" role="alert">' + JSON.parse(data.responseText).non_field_errors[0] + '</div>');#}
-
+                    game_upload_error.append(
+                        '<div class="alert alert-danger" role="alert">' + JSON.parse(data.responseText).game_record_file[0] + '</div>');
                 }
             });
         });
-
         ajax_list("/api/game_records", game_records_list);
     });
 </script>

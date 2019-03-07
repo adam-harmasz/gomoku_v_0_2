@@ -123,6 +123,9 @@
                         $("#pic-edit-success").append('<div class="alert alert-success" role="alert">Your profile picture has been successfully updated!</div>');
                         // update profile picture
                         ajax_get(url, change_profile_picture);
+                        // clear value from the form
+                        $("input#id_picture").val("");
+                        $("#userprofile-edit").modal("hide");
                     },
                     error: function (data) {
                         console.log(data.status + " status");

@@ -1,8 +1,5 @@
 from rest_framework import serializers
-from rest_framework.fields import CurrentUserDefault
-
 from django.contrib.auth import get_user_model
-from django.urls import reverse_lazy
 
 from core import models
 
@@ -17,18 +14,31 @@ class GomokuRecordFileSerializer(serializers.ModelSerializer):
         fields = ('id', 'game_record_file', 'url')
         read_only_fields = ('id',)
 
-    # def save(self):
-    #     profile = self.context['request'].user
-    #     game_record_file = self.validated_data['game_record_file']
-    #     url = self.validated_data['url']
-    #     print(profile, game_record_file, url)
-
     def create(self, validated_data):
+        """Creating GameRecordFile object"""
+        status = None
         user = self.context['request'].user
-        game_record_file = validated_data['game_record_file']
-        print(user, validated_data['game_record_file'])
-        profile = CurrentUserDefault()
+        url = validated_data.get('url')
+        game_record_file = validated_data.get('game_record_file')
+        if game_record_file:
+            status = 'file'
+        elif url:
+            status = 'url'
+        if status is None:
+            raise serializers.ValidationError('Status must be url or file')
         return models.GomokuRecordFile.objects.create(
             profile=user,
-            status='file',
+            status=status,
             game_record_file=game_record_file)
+
+    def validate_game_record_file(self, attrs):
+        """File validation"""
+        if str(attrs).endswith('.txt'):
+            return attrs
+        raise serializers.ValidationError(
+            'Wrong type of file, only txt type file allowed')
+
+    def validate_url(self, attrs):
+        """File validation"""
+        print(attrs)
+        return attrs
