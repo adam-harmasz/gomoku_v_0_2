@@ -57,10 +57,7 @@
 {% block jquery %}
 <script>
     $(document).ready(function() {
-        function clear_field() {
-            $('#id_name').val('')
-        }
-
+        // getting list of game records from the back end
         function ajax_list(url=null, success_func=null) {
             var container = $(".game-list");
             $.ajax({
@@ -77,7 +74,8 @@
                 }
             })
         }
-        
+
+        // building html list of game records
         function game_records_list(data=false) {
             $.each(data['results'], function (k, v) {
                 var a_element =  "<div id=\"div-players-" + v["id"] + "\" class=\"col col-lg-9\"><a href='/gomoku/game/" + v["id"] +
@@ -87,11 +85,11 @@
                     v["id"] + " data-toggle=\"modal\" data-target=\"#delete-modal\" >Delete</a></div>" + "<div id=\"div-w-100-" + v["id"] + "\" class=\"w-100\"></div>\n";
                 $("#game-record-list").append(a_element);
             });
+            $(".delete-game-data").off("click");
             delete_game_record();
         }
 
         // Function to pass id value to delete_game_record function
-
         function delete_game_record() {
             $(".delete-game-data").click(function (e) {
                 e.preventDefault();
@@ -120,9 +118,9 @@
                         // clear all not dismissed messages
                          game_delete_success.html("");
                         // delete html elements from deleted game record
-                        div_elem.remove( "#div-players-" + id );
-                        div_elem.remove( "#div-delete-" + id );
-                        div_elem.remove( "#div-w-100-" + id );
+                        div_elem.remove("#div-players-" + id);
+                        div_elem.remove("#div-delete-" + id);
+                        div_elem.remove("#div-w-100-" + id);
                         // success alert
                         game_delete_success.append("<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
                             "  <strong>Game has been successfully deleted.</strong> \n" +
@@ -143,9 +141,9 @@
         function infinite_scroll(next_url=null) {
             var page = 1,
                 empty_page = false,
-                block_request = false,
-                container = $(".game-list");
+                block_request = false;
 
+            // scroll event
             $(window).scroll(function() {
                 var margin = $(document).height() - $(window).height() - 200;
                 if ($(window).scrollTop() > margin && empty_page == false && block_request == false) {
@@ -153,41 +151,41 @@
                     page += 1;
                     url = next_url;
 
-                $.ajax({
-                    url: url,
-                    method: "GET",
-                    success: function(data){
-                        if(next_url == null) {
-                            console.log('the end!');
-                            empty_page = true;
-                        } else {
-                            block_request = false;
-                            game_records_list(data);
-                            next_url = data['next'];
-                            console.log(data['next'])
+                    // getting next page from the back end with ajax
+                    $.ajax({
+                        url: url,
+                        method: "GET",
+                        success: function(data){
+                            if(next_url == null) {
+                                console.log('the end!');
+                                empty_page = true;
+                            } else {
+                                block_request = false;
+                                game_records_list(data);
+                                next_url = data['next'];
+                                console.log(data['next'])
+                            }
+                        },
+                        error: function(data){
+                            console.log("error");
+                            console.log(data);
                         }
-                    },
-                    error: function(data){
-                        console.log("error");
-                        console.log(data);
-                    }
-                })
-
+                    })
                 }
             });
         }
 
-
-        // Edit user profile picture with ajax submit
+        // Upload game from the txt file and add to the list
         $("#game-upload-form").submit(function (e) {
             e.preventDefault();
             var formData = new FormData(),
                 game_upload_error = $("#game-upload-error"),
-                game_upload_success = $("#game-upload-success"),
+                game_upload_success = $("#game-delete-success"),
                 url = "/api/files/";
 
             formData.append("game_record_file", ($(this).find('[type=file]')[0].files[0]));
 
+            // sending post request to back end with ajax
             $.ajax({
                 enctype: "multipart/form-data",
                 url: url,
@@ -197,27 +195,25 @@
                 contentType: false,
                 success: function (data) {
                     console.log(data);
-
                     // clearing alert messages
-                    game_upload_error.html('');
-                    game_upload_success.html('');
+                    game_upload_success.html("");
 
                     // success alert message
-                    $("#game-delete-success").append("<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
+                    game_upload_success.append("<div class=\"alert alert-success alert-dismissible fade show\" role=\"alert\">\n" +
                             "  <strong>Game has been successfully added to your list</strong> \n" +
                             "  <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
                             "    <span aria-hidden=\"true\">&times;</span>\n" +
                             "  </button>\n" +
                             "</div>");
 
-                    // update profile picture
-                    {#ajax_get(url, change_profile_picture);#}
-
                     // silence submit event
                     $("#upload-modal").modal("hide");
-
                     // clear value from the form input
-                    $("input#id_file").val("")
+                    $("input#id_file").val("");
+                    // clear game record list
+                     $("#game-record-list").html("");
+                    // update profile picture
+                    ajax_list("/api/game_records", game_records_list);
                 },
                 error: function (data) {
                     console.log(data.status + " status");
@@ -225,8 +221,8 @@
                     console.log(data);
 
                     // Clearing alert messages
-                    game_upload_success.html();
-                    game_upload_error.html('');
+                    game_upload_success.html("");
+                    game_upload_error.html("");
 
                     // Adding alert error message
                     game_upload_error.append(
