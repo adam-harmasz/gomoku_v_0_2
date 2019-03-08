@@ -23,9 +23,6 @@
         {% endif %}
         <style>
         {% block style %}
-            {#body {#}
-            {#background-image: url("{% static "config/img/gomoku_board.jpg" %}");#}
-            {#}#}
         {% endblock style %}
         </style>
     </head>
@@ -47,7 +44,7 @@
                         <div class="navbar-nav">
                             {% if user.is_authenticated %}
                                 <div class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ user.userprofile.get_absolute_url }}" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <a class="nav-link dropdown-toggle text-capitalize" data-toggle="dropdown" href="{{ user.userprofile.get_absolute_url }}" role="button" aria-haspopup="true" aria-expanded="false">
                                         {{ user.username }}
                                     </a>
                                     <div class="dropdown-menu">

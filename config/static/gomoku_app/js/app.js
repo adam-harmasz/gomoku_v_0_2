@@ -70,6 +70,7 @@ $(document).ready(function () {
                         x: rect_x,
                         width: 40,
                         height: 40,
+                        stroke: "black",
                         class: "board-cell",
                     });
                     gomoku_board.append(rect_elem);

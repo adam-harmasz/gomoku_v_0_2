@@ -84,9 +84,9 @@
         function game_records_list(data=false) {
             $.each(data.users_games, function (k, v) {
                 var a_element =  "<div id=\"div-players-" + v["id"] + "\" class=\"col col-lg-9\"><a href='/gomoku/game/" + v["id"] +
-                    "' class='list-group-item list-group-item-action list-group-item-light game-record-item'>" +
+                    "' class='list-group-item list-group-item-action list-group-item-secondary game-record-item'>" +
                     v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a></div>" +
-                    "<div id=\"div-delete-" + v["id"] + "\" class=\"col\"><a href=\"#\" class=\"list-group-item list-group-item-action list-group-item-light\ delete-game-data\" data-id=" +
+                    "<div id=\"div-delete-" + v["id"] + "\" class=\"col\"><a href=\"#\" class=\"list-group-item list-group-item-action list-group-item-dark delete-game-data\" data-id=" +
                     v["id"] + " data-toggle=\"modal\" data-target=\"#delete-modal\" >Delete</a></div>" + "<div id=\"div-w-100-" + v["id"] + "\" class=\"w-100\"></div>\n";
                 $("#game-record-list").append(a_element);
             });

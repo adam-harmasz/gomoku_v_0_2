@@ -86,33 +86,34 @@
     </div>
 {% endblock content %}
 {% block sidebar %}
-    <ul class="list-group list-group-flush">
+    <ul class="list-group">
+{#        <legend class="text-center">Game info</legend>#}
         {% if object.color_change %}
-            <li class="list-group-item">
+            <li class="list-group-item list-group-item-secondary">
                 <img src="{% static 'gomoku_app/img/Black_Go_Stone.png' %}" style="width: 30px; height: 30px">
-                <span>{{ object.white_player }}</span>
+                <span class="text-capitalize">{{ object.white_player }}</span>
                  -
-                <span>{{ object.black_player }}</span>
+                <span class="text-capitalize">{{ object.black_player }}</span>
                 <img src="{% static 'gomoku_app/img/White_Go_Stone.png' %}" style="width: 30px; height: 30px">
             </li>
         {% else %}
-            <li class="list-group-item ">
+            <li class="list-group-item list-group-item-secondary">
                 <img src="{% static 'gomoku_app/img/Black_Go_Stone.png' %}" style="width: 30px; height: 30px">
-                <span>{{ object.black_player }}</span>
+                <span class="text-capitalize">{{ object.black_player }}</span>
                 -
-                <span>{{ object.white_player }}</span>
+                <span class="text-capitalize">{{ object.white_player }}</span>
                 <img src="{% static 'gomoku_app/img/White_Go_Stone.png' %}" style="width: 30px; height: 30px">
             </li>
         {% endif %}
-        <li class="list-group-item ">
-            <span>
+        <li class="list-group-item list-group-item-secondary">
+            <span class="text-capitalize">
                 {{ object.black_player }} opened the game.
             </span>
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item list-group-item-secondary">
             <span>Swap2 option {% if object.swap_2 %}was{% else %}wasn't{% endif %} used.</span>
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item list-group-item-secondary">
             <span>Color{% if object.color_change %} was{% else %} wasn't{% endif %} changed</span>
         </li>
     </ul>
