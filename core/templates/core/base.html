@@ -21,7 +21,13 @@
             {% else %}
             <title>Gomoku app v.2</title>
         {% endif %}
-        {% block style %}{% endblock style %}
+        <style>
+        {% block style %}
+            {#body {#}
+            {#background-image: url("{% static "config/img/gomoku_board.jpg" %}");#}
+            {#}#}
+        {% endblock style %}
+        </style>
     </head>
     <body>
         <header class="site-header">
@@ -34,6 +40,7 @@
                     <div class="collapse navbar-collapse" id="navbarToggle">
                         <div class="navbar-nav mr-auto">
                             <a class="nav-item nav-link" href="{% url 'home' %}">Home</a>
+                            <a class="nav-item nav-link" href="{% url 'about' %}">About gomoku</a>
                             <a class="nav-item nav-link" href="{% url 'gomoku:game-list' %}">Your games</a>
                         </div>
                         <!-- Navbar Right Side -->
@@ -63,7 +70,8 @@
         </header>
         <main role="main" class="container">
             <div class="row">
-                <div class="col-md-8">
+{#                <div class="col-md-8">#}
+                <div class="col-md">
                     {% if messages %}
                         {% for message in messages %}
                             <div class="alert alert-{{ message.tags }}">
@@ -73,12 +81,9 @@
                     {% endif %}
                     {% block content %}{% endblock content%}
                 </div>
+                {% block sidebar %}
+                {% endblock sidebar %}
 
-                <div class="col-md-4">
-                    {% block sidebar %}
-
-                    {% endblock sidebar %}
-                </div>
             </div>
         </main>
 

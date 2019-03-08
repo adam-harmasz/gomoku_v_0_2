@@ -1,4 +1,110 @@
 {% extends "core/base.html" %}
+{% load static %}
+{% block style %}
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+         }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+         }
+    </style>
+{% endblock style %}
 {% block content %}
-    <h1>About Page</h1>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="text-center">Game of Gomoku</h1>
+            <hr>
+            <br />
+            <p style="font-size: large">
+                Gomoku, also called Five in a Row or Naughts and Crosses, is an strategy board game.
+                It is traditionally played with Go pieces(black and white stones) on a Go board(goban),
+                using 15x15 of the 19x19 grid intersections.
+                The goal of the game is to place unbroken chain of five stones horizontally, vertically, or diagonally.
+            </p>
+            <p>
+                Example of the game: <a href="https://youtu.be/GURL2B07hLw"> link</a><br />
+                It's a blitz game played by me(right side) against former World Champion in Budapest as a part of "one minute" tournament.
+            </p>
+        </div>
+    </div>
+    <div class="container">
+
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Rules</h2>
+                <p>
+                    <strong>Standard - </strong>The most basic variation, black player starts the game,
+                    game ends when one player formed unbroken chain of five(not more) stones.
+                    This variations of the game has been solved, black player who plays perfect moves has so called "sure win".
+                </p>
+                <hr>
+                <p>
+                    <strong>Swap - </strong>Because "Standard" variation has been solved, players seek for a solution to make game
+                    more fair. In this variation black player starts with placing three stones on the board(2 black stones and one white stone),
+                    and then white player has to choose to play black or white stones.
+                </p>
+                <hr>
+                <p>
+                     <strong>Swap2 - </strong>Swap rule was a main variation for a few years, however it still wasn't perfect.
+                    In swap2 variation black player starts with placing three stones, then white player has three options, choose black stones,
+                    choose white stones or place additional two stones of the board, if additional stones are placed then black player is choosing
+                    the color. Swap2 variation is official one to play in tournaments.
+                </p>
+            <p><a class="btn btn-secondary" href="http://gomokuworld.com/gomoku/2" role="button">Learn more &raquo;</a></p>
+            </div>
+            <div class="col-md-4">
+            <h2>History</h2>
+            <p>
+                Gomoku has existed in Japan since the Meiji Restoration.
+                The name "Gomoku" is from the Japanese language, in which it is referred to as gomokunarabe (五目並べ).
+                Go means five, moku is a counter word for pieces and narabe means line-up.
+                The game is also popular in Korea, where it is called omok (오목 [五目]) which has the same structure and origin as the Japanese name.
+                The Japanese call this game Go-moku (five stones). In the nineteenth century,
+                the game was introduced to Britain where it was known as Go Bang, said to be a corruption of the Japanese word goban,
+                said to be adopted from Chinese k'i pan (qí pán) "go-board."
+            </p>
+            <p><a class="btn btn-secondary" href="http://gomokuworld.com/gomoku/3" role="button">Learn More &raquo;</a></p>
+            </div>
+            <div class="col-md-4">
+            <h2>Links</h2>
+            <p>
+                Gomoku has never been very popular, however there is active international community, tournaments, leagues.
+                You can find more information in a list of links added below:
+                <p>
+                    <a href="https://en.wikipedia.org/wiki/Gomoku">Wikipedia</a>
+                </p>
+                <p>
+                    <a href="http://gomokuworld.com/">Gomoku World</a>
+                </p>
+                <p>
+                    <a href="http://www.gomoku.5v.pl">Polish Gomoku, Renju and Pente Association</a>
+                </p>
+                <p>
+                    <a href="http://euroleague.cz">Euroleague, biggest gomoku team league</a>
+                </p>
+                <p>
+                    <a href="http://forum.gomoku.pl/">Forum gomoku, mainly for Polish community</a>
+                </p>
+            </p>
+        </div>
+    </div>
+
+    <hr>
+
+    </div> <!-- /container -->
+
+
+
+
 {% endblock content %}

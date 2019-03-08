@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load static %}
 {% block style %}
     <style>
         .board-cell {
@@ -46,12 +47,15 @@
         <div id="game-record-list" class="row">
         </div>
     </div>
+    <hr>
 {% endblock content %}
 {% block sidebar %}
-    {% include "gomoku_app/game_download_modal.html" %}
-    <br />
-    <br />
-    {% include "gomoku_app/game_upload_modal.html" %}
+     <div class="col-md-4">
+        {% include "gomoku_app/game_download_modal.html" %}
+        <br />
+        <br />
+        {% include "gomoku_app/game_upload_modal.html" %}
+    </div>
 {% endblock sidebar %}
 
 {% block jquery %}
