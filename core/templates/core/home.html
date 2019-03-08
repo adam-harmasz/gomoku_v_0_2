@@ -1,4 +1,54 @@
 {% extends "core/base.html" %}
+{% load static %}
 {% block content %}
-    <div class="content-section">Something</div>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="text-center text-capitalize">Hello {{ user.username }}!</h1>
+            <hr>
+            <div class="row">
+                <div class="col-md-8">
+                    <h3 >About me:</h3 >
+                    <p style="font-size: large">
+                        My name is Adam Harmasz and I'm fan of strategical/logical games, as a teeneger and in my early twenties, I was especially fascinated by game of Gomoku. It's a game
+                        with very simple rules, however it's still very complex with wide variety of opening strategies and types of play.
+                    </p>
+                    <p>
+                        Example of the game: <a href="https://youtu.be/GURL2B07hLw"> link</a><br />
+                        It's a blitz game played by me(right side) against former World Champion in Budapest as a part of "one minute" tournament.
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <img src="{% static 'config/img/GOMOKU-Harmasz_vs_Toth2.JPG' %}" style="max-width: 100%; max-height: 100%">
+                    <small>I am the one on the left</small>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 >About project:</h3 >
+                    <p style="font-size: large">
+                        This web application has been made to store and analyze gomoku games, so you can have a list of your favourite gomoku games.
+                        For now games can be uploaded from a file, or downloaded from <a href="https://www.kurnik.pl/gomoku/"> kurnik</a>
+                        or <a href="https://www.playok.com/gomoku/"> playok</a>(It's a kurnik with English alias).
+                        <h4>
+                            Available features:
+                        </h4>
+                        <span>
+                            User registration, login, password reset and password change with email confirmation.
+                        </span><br/>
+                        <span>
+                            Uploading game from the file with file extension validation.
+                        </span><br/>
+                        <span>
+                            Downloading game from kurnik/playok with url validation.
+                        </span>
+                        <span>
+                            Downloading game from kurnik/playok with url validation.
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
