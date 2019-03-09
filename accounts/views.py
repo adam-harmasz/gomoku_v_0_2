@@ -32,6 +32,7 @@ class RegisterView(View):
             User.objects.create_user(
                 username=cd['username'],
                 email=cd['email'],
+                first_name=cd.get('first_name'),
                 password=cd['password']
             )
             username = form.cleaned_data.get('username')

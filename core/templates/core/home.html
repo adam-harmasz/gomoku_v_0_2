@@ -1,6 +1,17 @@
 {% extends "core/base.html" %}
 {% load static %}
 {% block content %}
+    <!-- Modal -->
+    <div class="modal fade" id="img-modal-home" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="{% static 'config/img/GOMOKU-Harmasz_vs_Toth2.JPG' %}" style="max-height: 100%; max-width: 100%">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
         <div class="container">
@@ -19,7 +30,7 @@
                     </p>
                 </div>
                 <div class="col-md-4">
-                    <img src="{% static 'config/img/GOMOKU-Harmasz_vs_Toth2.JPG' %}" style="max-width: 100%; max-height: 100%">
+                    <img src="{% static 'config/img/GOMOKU-Harmasz_vs_Toth2.JPG' %}" style="max-width: 100%; max-height: 100%" data-toggle="modal" data-target="#img-modal-home">
                     <small>I am the one on the left</small>
                 </div>
             </div>
@@ -30,19 +41,22 @@
                     <p style="font-size: large">
                         This web application has been made to store and analyze gomoku games, so you can have a list of your favourite gomoku games.
                         For now games can be uploaded from a file, or downloaded from <a href="https://www.kurnik.pl/gomoku/"> kurnik</a>
-                        or <a href="https://www.playok.com/gomoku/"> playok</a>(It's a kurnik with English alias).
+                        or <a href="https://www.playok.com/gomoku/"> playok</a>(It's a kurnik with English alias). After
                         <h4>
                             Available features:
                         </h4>
                         <span>
                             User registration, login, password reset and password change with email confirmation.
-                        </span><br/>
+                        </span><br />
+                        <span>
+
+                        </span><br />
                         <span>
                             Uploading game from the file with file extension validation.
-                        </span><br/>
+                        </span><br />
                         <span>
                             Downloading game from kurnik/playok with url validation.
-                        </span>
+                        </span><br />
                         <span>
                             Downloading game from kurnik/playok with url validation.
                         </span>

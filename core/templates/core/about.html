@@ -19,22 +19,39 @@
     </style>
 {% endblock style %}
 {% block content %}
+    <!-- Modal -->
+    <div class="modal fade" id="img-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="{% static 'config/img/introduction_of_gomoku_002.jpg' %}" style="max-height: 100%; max-width: 100%">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
         <div class="container">
-            <h1 class="text-center">Game of Gomoku</h1>
-            <hr>
-            <br />
-            <p style="font-size: large">
-                Gomoku, also called Five in a Row or Naughts and Crosses, is an strategy board game.
-                It is traditionally played with Go pieces(black and white stones) on a Go board(goban),
-                using 15x15 of the 19x19 grid intersections.
-                The goal of the game is to place unbroken chain of five stones horizontally, vertically, or diagonally.
-            </p>
-            <p>
-                Example of the game: <a href="https://youtu.be/GURL2B07hLw"> link</a><br />
-                It's a blitz game played by me(right side) against former World Champion in Budapest as a part of "one minute" tournament.
-            </p>
+            <div class="row">
+                <div class="col-md-8">
+                    <h1 class="text-center">Game of Gomoku</h1>
+                    <hr>
+                    <br />
+                    <p style="font-size: large">
+                        Gomoku, also called Five in a Row or Naughts and Crosses, is an strategy board game.
+                        It is traditionally played with Go pieces(black and white stones) on a Go board(goban),
+                        using 15x15 of the 19x19 grid intersections.
+                        The goal of the game is to place unbroken chain of five stones horizontally, vertically, or diagonally.
+                    </p>
+                    <p>
+
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <img src="{% static 'config/img/introduction_of_gomoku_002.jpg' %}" style="max-height: 100%; max-width: 100%" data-toggle="modal" data-target="#img-modal">
+                </div>
+            </div>
         </div>
     </div>
     <div class="container">
@@ -79,7 +96,7 @@
             <div class="col-md-4">
             <h2>Links</h2>
             <p>
-                Gomoku has never been very popular, however there is active international community, tournaments, leagues.
+                Gomoku has never been very popular, however there is an active international community, tournaments, leagues.
                 You can find more information in a list of links added below:
                 <p>
                     <a href="https://en.wikipedia.org/wiki/Gomoku">Wikipedia</a>

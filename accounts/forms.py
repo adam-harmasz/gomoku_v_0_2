@@ -9,17 +9,18 @@ User = get_user_model()
 
 class UserRegisterForm(forms.ModelForm):
     # Form for user registration with email, and user validation
-    email = forms.EmailField()
+    email = forms.EmailField(required=True)
     password = forms.CharField(required=True,
                                label='Password',
                                widget=forms.PasswordInput)
     password2 = forms.CharField(required=True,
                                 label='Repeat password',
                                 widget=forms.PasswordInput,)
+    first_name = forms.CharField(required=False)
 
     class Meta:
         model = User
-        fields = ('username', 'email',)
+        fields = ('username', 'email', 'first_name')
 
     def clean_username(self):
         # username validation
@@ -42,6 +43,7 @@ class UserRegisterForm(forms.ModelForm):
             print('email')
             raise ValidationError(
                 f'that email address {email} is already taken')
+        return email
 
     def clean_password2(self):
         password = self.cleaned_data['password']
