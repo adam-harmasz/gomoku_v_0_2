@@ -82,16 +82,24 @@
 
         // building html list of game records
         function game_records_list(data=false) {
-            $.each(data.users_games, function (k, v) {
-                var a_element =  "<div id=\"div-players-" + v["id"] + "\" class=\"col col-lg-9\"><a href='/gomoku/game/" + v["id"] +
-                    "' class='list-group-item list-group-item-action list-group-item-secondary game-record-item'>" +
-                    v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a></div>" +
-                    "<div id=\"div-delete-" + v["id"] + "\" class=\"col\"><a href=\"#\" class=\"list-group-item list-group-item-action list-group-item-dark delete-game-data\" data-id=" +
-                    v["id"] + " data-toggle=\"modal\" data-target=\"#delete-modal\" >Delete</a></div>" + "<div id=\"div-w-100-" + v["id"] + "\" class=\"w-100\"></div>\n";
-                $("#game-record-list").append(a_element);
-            });
-            $(".delete-game-data").off("click");
-            delete_game_record();
+            console.log(data.users_games.length);
+            if (data.users_games.length == 0) {
+                var help_element = "<div class='col text-center'><div class='row'><div class='col'><h1>Your list is empty!</h1></div></div>" +
+                    "<div class='row'><div class='col'><p>Use buttons on the right to add games to your list. </p></div></div>" +
+                    "<div class='row'><div class='col'><p>If you're having troubles, please visit <a href='/help/'>help</a> section.<p><div class='col'></div></div>";
+                $("#game-record-list").append(help_element);
+            } else {
+                $.each(data.users_games, function (k, v) {
+                    var a_element =  "<div id=\"div-players-" + v["id"] + "\" class=\"col col-lg-9\"><a href='/gomoku/game/" + v["id"] +
+                        "' class='list-group-item list-group-item-action list-group-item-secondary game-record-item'>" +
+                        v["black_player_nickname"] + " - " + v["white_player_nickname"] + "</a></div>" +
+                        "<div id=\"div-delete-" + v["id"] + "\" class=\"col\"><a href=\"#\" class=\"list-group-item list-group-item-action list-group-item-dark delete-game-data\" data-id=" +
+                        v["id"] + " data-toggle=\"modal\" data-target=\"#delete-modal\" >Delete</a></div>" + "<div id=\"div-w-100-" + v["id"] + "\" class=\"w-100\"></div>\n";
+                    $("#game-record-list").append(a_element);
+                });
+                $(".delete-game-data").off("click");
+                delete_game_record();
+            }
         }
 
         // Function to pass id value to delete_game_record function

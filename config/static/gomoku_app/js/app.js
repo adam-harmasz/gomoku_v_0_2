@@ -131,29 +131,27 @@ $(document).ready(function () {
             })
     }
 
-
     // undo move on board according to game record
     function undo_move() {
         var undo_btn = $('#undo');
-            undo_btn.on('click', function (e) {
-                e.preventDefault();
-                turn = turn === 'O' ? 'X' : 'O';
+        undo_btn.on('click', function (e) {
+            e.preventDefault();
+            turn = turn === 'O' ? 'X' : 'O';
 
-                if (move === game_record_list.length) {
-                    silence_next_move();
-                    next_move();
-                    silence_last_move();
-                    last_move();
-                }
-                move -= 1;
-                console.log(game_record_list[move].slice(1, -1));
-                $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'transparent');
-                if (move === 0) {
-                    silence_undo_move();
-                }
-            })
+            if (move === game_record_list.length) {
+                silence_next_move();
+                next_move();
+                silence_last_move();
+                last_move();
+            }
+            move -= 1;
+            console.log(game_record_list[move].slice(1, -1));
+            $('#'.concat(game_record_list[move].slice(1, -1))).css('fill', 'transparent');
+            if (move === 0) {
+                silence_undo_move();
+            }
+        });
     }
-
 
         // show all moves at once
         function last_move() {
@@ -223,7 +221,7 @@ $(document).ready(function () {
             game_record_length = game_record_list.length;
 
         for (var i = 0; i < game_record_length; i++) {
-            var list_group_item = $("<button type='button' class='btn-group btn-secondary game-record-buttons' name='" +
+            var list_group_item = $("<button type='button' class='btn btn-outline-secondary game-record-buttons' name='" +
                 (i + 1) + "'>" + (i + 1) + ": " + game_record_list[i].slice(1, -1) + "</button>");
             $(game_record_tag.append(list_group_item));
 
