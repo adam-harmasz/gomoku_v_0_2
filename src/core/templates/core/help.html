@@ -11,7 +11,7 @@
     {% include "core/modal_help_7.html" %}
 
     <legend class="text-center">Follow the guide below to learn how to use this application:</legend>
-
+    <br />
     {#  DOWLOAD GOMOKU RECORD FROM KURNIK SECTION  #}
     <div class="accordion" id="accordionExample">
         <div class="card">
@@ -26,20 +26,18 @@
                 <div class="card-body" style="font-size: large">
                     <ol>
                         <li>
-
-                        <li>
                             Please visit this
                             <a href="https://www.kurnik.pl/stat.phtml?u=henryy07&g=gm&sk=2">link</a>.
                             You should see statistics of nickname "henryy07" (it's my account).
                             You can use this <a href="https://github.com/henryy07/gomoku_v_0_2/blob/master/samples/links/game_records.md"> link</a> as well, it's a list of sample links that can be used.
                             To add one of these games to your list copy link of txt item, or copy one of the links from the list I've provided.
-                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#help-modal-1">look here</button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#help-modal-1">screen</button>
                         </li>
                         <li>Copied link should look like this one: <strong>https://www.kurnik.pl/p/?g=gm133521621&txt</strong> (you can use this link, at the end of this section I'll provide more valid links)</li>
                         <li>
                             Go to the <a href="{% url 'gomoku:game-list' %}">game list</a>
-                            section, and click on "Download game from Kurnik/Plyok" button, you should see something like
-                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#help-modal-2">this</button>
+                            section, and click on "Download game from Kurnik/Plyok" button, you should see something like this
+                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#help-modal-2">screen</button>
                         </li>
                         <li>
                             If you paste link, just press "Confirm" and if everything went well, you should see similar
@@ -71,11 +69,11 @@
                         <li>
                             If you have sample game records files go to <a href="{% url 'gomoku:game-list' %}"> "Your games"</a> section
                             and click "Upload game from file" button, then you should see something like this:
-                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#help-modal-4">look here</button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#help-modal-4">screen</button>
                         </li>
                         <li>
                             If you already chose and loaded file to the form, press "Confirm" button and you should see similar screen:
-                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#help-modal-5">look here</button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#help-modal-5">screen</button>
                         </li>
                         <li>
                             <strong>Congratulations!</strong> You just added game to your list, now you can display game record by clicking on a link.<br />

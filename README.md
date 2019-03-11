@@ -50,7 +50,8 @@ if you'll have problems with downloading/uploading games, follow guide in "Help"
     - User registration/login
     - Updating user profile
     - Password reset/password change
-To do:
+    
+- To do:  
     - Filtering list of games
     - Adding comments and alternative moves to the game record
     - Enable downloading games from [piskvorky.net](http://www.piskvorky.net/) (second biggest gomoku website)
