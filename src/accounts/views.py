@@ -18,7 +18,7 @@ class RegisterView(View):
         """function handling GET method"""
         form = forms.UserRegisterForm()
         return render(request,
-                      "registration/templates/registration/registration_form.html", {"form": form})
+                      "registration/registration_form.html", {"form": form})
 
     def post(self, request):
         """function handling POST method"""
@@ -37,14 +37,14 @@ class RegisterView(View):
 
         ctx = {"form": form}
         return render(request,
-                      "registration/templates/registration/registration_form.html", ctx)
+                      "registration/registration_form.html", ctx)
 
 
 class UserProfileView(LoginRequiredMixin, DetailView):
     """Detail view of user profile"""
 
     queryset = models.UserProfile.objects.all()
-    template_name = "accounts/templates/accounts/profile.html"
+    template_name = "accounts/profile.html"
 
     def get_context_data(self, **kwargs):
         """adding user form, userprofile form and user context to the view"""
