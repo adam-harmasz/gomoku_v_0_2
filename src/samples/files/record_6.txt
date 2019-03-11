@@ -1,0 +1,17 @@
+[Event "?"]
+[Site "PlayOK"]
+[Date "2019.01.30"]
+[Round "-"]
+[Black "uskovic"]
+[White "acrux"]
+[Result "1-0"]
+[Time "21:09:01"]
+[TimeControl "60"]
+[GameType "61,15"]
+[BlackElo "1969"]
+[WhiteElo "1952"]
+
+1. e14 e13 2. c11 black 3. f11 e10 4. e9 f9 5. d11 g11 6. g10 h9 7. f13 e12 8.
+d10 d12 9. g12 g13 10. i9 i10 11. g8 j10 12. f8 g7 13. d8 e8 14. c7 b6 15. c9
+d9 16. b8 e11 17. d6 a9 18. e7 b10 19. c5 d13 20. b4 1-0
+

@@ -1,14 +1,9 @@
 {% extends "core/base.html" %}
 {% load crispy_forms_tags %}
-{% load static %}
 {% block content %}
     <div class="content-section">
         <div class="media">
-            {% if user.userprofile.picture.url %}
-                <img id="profile-pic" class="rounded-circle account-img" src="{{ user.userprofile.picture.url }}">
-            {% else %}
-                <img id="profile-pic" class="rounded-circle account-img" src="{% static 'config/img/default.jpg' %}">
-            {% endif %}
+            <img id="profile-pic" class="rounded-circle account-img" src="{{ user.userprofile.picture.url }}">
             <div class="media-body">
                 <h2 class="account-heading">{{ user.username }}</h2>
                 <p id="p-name-id" class="text-secondary">{{ user.first_name }}</p>
