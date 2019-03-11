@@ -1,0 +1,18 @@
+[Event "?"]
+[Site "PlayOK"]
+[Date "2019.01.30"]
+[Round "-"]
+[Black "rosamimosa"]
+[White "henryy07"]
+[Result "1-0"]
+[Time "17:53:33"]
+[TimeControl "180"]
+[GameType "61,15"]
+[BlackElo "1621"]
+[WhiteElo "1946"]
+
+1. h3 i3 2. j3 i11 3. h11 -- 4. black j5 5. h5 i4 6. i6 g4 7. h4 h6 8. g7 k9 9.
+j7 k8 10. k7 j10 11. l8 i7 12. j8 i9 13. m9 n10 14. l5 l7 15. i8 k6 16. m8 m6
+17. j9 k11 18. l12 j12 19. k10 l11 20. j11 h12 21. g13 i12 22. g12 i13 23. i10
+f13 24. h14 g11 25. f10 e11 26. g8 h9 27. g6 h7 28. g9 g10 29. g5 1-0
+
