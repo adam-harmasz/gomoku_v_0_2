@@ -67,3 +67,9 @@ if you'll have problems with downloading/uploading games, follow guide in "Help"
     - JavaScript/jQuery
     - Bootstrap 4
     
+### How does it look like: 
+ 
+First example:  
+![example 1](https://github.com/henryy07/gomoku_v_0_2/blob/master/samples/img/sample_img1.jpg)  
+Second example:  
+![example 2](https://github.com/henryy07/gomoku_v_0_2/blob/master/samples/img/sample_img2.jpg)
