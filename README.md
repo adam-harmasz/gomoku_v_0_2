@@ -1,4 +1,4 @@
-## gomoku_v_0_2 
+# gomoku_v_0_2 
 
 This is an application to store gomoku game records and display them, it allows user to download game from kurnik/playok
 or upload game record from a file.
@@ -29,7 +29,7 @@ or:
 
 ### USAGE
 
-- To use this application you need to type(if you're in your workspace directory):  
+- To use this application you need to type (if you're in your workspace directory):  
     `python manage.py runserver`  
 or  
     `python3 manage.py runserver`  
@@ -37,7 +37,7 @@ or
 if you'll have problems with downloading/uploading games, follow guide in "Help" section.
 - Main functionalities:
     - Downloading game record via URL using requests
-    - Uploading game in txt format(for now)
+    - Uploading game in txt format (for now)
     - Extracting data from game record such as: 
         - player nicknames 
         - result 
@@ -53,7 +53,7 @@ if you'll have problems with downloading/uploading games, follow guide in "Help"
 To do:
     - Filtering list of games
     - Adding comments and alternative moves to the game record
-    - Enable downloading games from piskvorky.net(second biggest gomoku website)
+    - Enable downloading games from [piskvorky.net](http://www.piskvorky.net/) (second biggest gomoku website)
     - Uploading game from .bdt type of file
     
 - Technologies used:
