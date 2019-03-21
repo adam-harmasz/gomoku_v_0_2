@@ -1,3 +1,4 @@
+"""Views, UserProfile and register"""
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -5,10 +6,8 @@ from django.views import View
 from django.views.generic import DetailView
 from django.contrib.auth import get_user_model
 
-from . import forms
 from core import models
-
-User = get_user_model()
+from . import forms
 
 
 class RegisterView(View):
@@ -24,12 +23,12 @@ class RegisterView(View):
         """function handling POST method"""
         form = forms.UserRegisterForm(request.POST)
         if form.is_valid():
-            cd = form.cleaned_data
-            User.objects.create_user(
-                username=cd["username"],
-                email=cd["email"],
-                first_name=cd.get("first_name"),
-                password=cd["password"],
+            cleaned_data = form.cleaned_data
+            get_user_model().objects.create_user(
+                username=cleaned_data["username"],
+                email=cleaned_data["email"],
+                first_name=cleaned_data.get("first_name"),
+                password=cleaned_data["password"],
             )
             username = form.cleaned_data.get("username")
             messages.success(request, f"Account created for {username}!")

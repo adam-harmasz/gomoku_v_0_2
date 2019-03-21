@@ -1,3 +1,4 @@
+"""Routers for API viewsets"""
 from rest_framework import routers
 
 from accounts.api import views as accounts_views

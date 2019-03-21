@@ -1,13 +1,12 @@
-from django.core.paginator import Paginator, EmptyPage
-from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from rest_framework.validators import UniqueValidator
+"""Serializers handling User and UserProfile objects"""
 import re
+from django.core.paginator import Paginator, EmptyPage
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from gomoku_app.api.serializers import GomokuRecordSerializer
 from core import models
-
-User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -23,23 +22,24 @@ class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         validators=[
             UniqueValidator(
-                queryset=User.objects.all(),
+                queryset=get_user_model().objects.all(),
                 message="That email address is already taken.",
             )
         ]
     )
     users_games = serializers.SerializerMethodField("paginated_users_games")
-    # users_games = GomokuRecordSerializer(read_only=True, many=True)
 
     class Meta:
-        model = User
+        """Defining model and fields for serializer"""
+        model = get_user_model()
         fields = ("id", "username", "email", "first_name", "password", "users_games")
 
     def create(self, validated_data):
         """create a new user with encrypted password and return it"""
-        return User.objects.create_user(**validated_data)
+        return get_user_model().objects.create_user(**validated_data)
 
     def paginated_users_games(self, obj):
+        """method to get paginated results from serializer"""
         try:
             page_size = self.context["request"].query_params.get("size") or 20
             paginator = Paginator(obj.users_games.all(), page_size)
@@ -55,6 +55,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     """Serializer for the profile objects"""
 
     class Meta:
+        """Defining model and fields for serializer"""
         model = models.UserProfile
         fields = ("id", "user", "picture")
         read_only_fields = ("id",)
@@ -77,6 +78,7 @@ class UserProfilePictureSerializer(serializers.ModelSerializer):
     """Serializer for uploading images to user profile"""
 
     class Meta:
+        """Defining model and fields for serializer"""
         model = models.UserProfile
         fields = ("id", "picture")
         read_only_fields = ("id",)

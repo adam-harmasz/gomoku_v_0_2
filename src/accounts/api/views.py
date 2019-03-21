@@ -1,18 +1,16 @@
+"""API views to handle serialized data"""
 from rest_framework import viewsets
-
-from django.contrib.auth import get_user_model
 from rest_framework import permissions
+from django.contrib.auth import get_user_model
 
 from core import models
 from . import serializers
-
-User = get_user_model()
 
 
 class UserViewset(viewsets.ModelViewSet):
     """User objects Viewset"""
 
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer_class = serializers.UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 

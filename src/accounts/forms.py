@@ -1,14 +1,13 @@
+"""Forms for User and UserProfile data post"""
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 from core import models
 
-User = get_user_model()
-
 
 class UserRegisterForm(forms.ModelForm):
-    # Form for user registration with email, and user validation
+    """Form for user registration with email, and user validation"""
     email = forms.EmailField(required=True)
     password = forms.CharField(
         required=True, label="Password", widget=forms.PasswordInput
@@ -19,32 +18,34 @@ class UserRegisterForm(forms.ModelForm):
     first_name = forms.CharField(required=False)
 
     class Meta:
-        model = User
+        """Specifying model and fields for the form"""
+        model = get_user_model()
         fields = ("username", "email", "first_name")
 
     def clean_username(self):
-        # username validation
+        """username validation"""
         username = self.cleaned_data.get("username")
         if not username:
             raise forms.ValidationError("The field cannot be empty")
-        qs = User.objects.filter(username=username)
-        if qs.exists():
+        user = get_user_model().objects.filter(username=username)
+        if user.exists():
             print("username")
             raise ValidationError(f"{username} already exists")
         return username
 
     def clean_email(self):
-        # email validation
+        """email validation"""
         email = self.cleaned_data["email"]
         if not email:
             raise forms.ValidationError("Field cannot be empty")
-        qs = User.objects.filter(email=email)
-        if qs.exists():
+        user = get_user_model().objects.filter(email=email)
+        if user.exists():
             print("email")
             raise ValidationError(f"that email address {email} is already taken")
         return email
 
     def clean_password2(self):
+        """password2 validation"""
         password = self.cleaned_data["password"]
         password2 = self.cleaned_data["password2"]
         if not password or not password2:
@@ -59,7 +60,8 @@ class UserEditForm(forms.ModelForm):
     email = forms.EmailField()
 
     class Meta:
-        model = User
+        """Specifying model and fields for the form"""
+        model = get_user_model()
         fields = ("first_name", "email")
 
     def clean_email(self):
@@ -67,8 +69,8 @@ class UserEditForm(forms.ModelForm):
         email = self.cleaned_data["email"]
         if not email:
             raise forms.ValidationError("Field cannot be empty")
-        qs = User.objects.filter(email=email)
-        if qs.exists():
+        user = get_user_model().objects.filter(email=email)
+        if user.exists():
             print("email")
             raise ValidationError(f"that email address {email} is already taken")
 
@@ -84,12 +86,14 @@ class UserProfileEditForm(forms.ModelForm):
     """Form for editing user profile picture"""
 
     class Meta:
+        """Specifying model and fields for the form"""
         model = models.UserProfile
         fields = ("picture",)
         widgets = {"picture": forms.FileInput()}
 
 
 class UserPasswordChangeForm(forms.Form):
+    """Class for User password change form"""
     current_password = forms.CharField(
         required=True, label="Current password", widget=forms.PasswordInput
     )
@@ -101,7 +105,8 @@ class UserPasswordChangeForm(forms.Form):
     )
 
     class Meta:
-        model = User
+        """Specifying model and fields for the form"""
+        model = get_user_model()
         fields = ("current_password", "new_password", "re_new_password")
 
     def clean_password2(self):
