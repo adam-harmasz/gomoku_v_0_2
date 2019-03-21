@@ -1,16 +1,15 @@
+"""Serializers for gomoku_file_app API"""
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
 
 from core import models
 from core.utils import check_domain
-
-User = get_user_model()
 
 
 class GomokuRecordFileSerializer(serializers.ModelSerializer):
     """serializers to handle file object and help with extracting data"""
 
     class Meta:
+        """Specifying model and fields for serializer"""
         model = models.GomokuRecordFile
         fields = ("id", "game_record_file", "url")
         read_only_fields = ("id",)

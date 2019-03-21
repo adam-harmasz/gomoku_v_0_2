@@ -1,12 +1,9 @@
+"""API views for gomoku_file_app"""
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 
-from django.contrib.auth import get_user_model
-
 from core import models
 from . import serializers
-
-User = get_user_model()
 
 
 class GomokuRecordImageViewset(viewsets.ModelViewSet):
