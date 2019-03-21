@@ -1,3 +1,4 @@
+"""Urls for basic views"""
 from django.urls import path
 
 from . import views

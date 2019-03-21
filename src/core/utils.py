@@ -1,3 +1,4 @@
+"""Utils file to place 'help' functions"""
 import re
 from datetime import datetime
 from collections import defaultdict
@@ -66,12 +67,10 @@ def extract_data_from_game_record_file(filename=None, url=None):
     elif filename is not None:
         with open(filename, "r") as f:
             f_content = f.read()
-            print(f_content)
             return extract_data(f_content)
     elif url is not None:
         res = requests.get(url)
-        print(res.text)
-        if len(res.text) == 0:
+        if not res.text:
             raise ValueError("no content")
         return extract_data(res.text)
 
@@ -112,10 +111,10 @@ def make_game_record_list(game_record_str):
     game_record_list = [_ for _ in game_record_list if _ != ""]
 
     # removing . which was attached to numbers
-    for i, v in enumerate(game_record_list):
-        if "." in v:
-            v = v.rstrip(".")
-            game_record_list[i] = int(v)
+    for index, value in enumerate(game_record_list):
+        if "." in value:
+            value = value.rstrip(".")
+            game_record_list[index] = int(value)
 
     return game_record_list
 
@@ -129,13 +128,13 @@ def get_game_record_from_list(game_record_list):
     # Removing all statements from the list which aren't moves coordinates
     game_record_list_with_only_moves = []
     counter = 1
-    for i, v in enumerate(game_record_list):
-        if i == 0 or i % 3 == 0:
+    for index, value in enumerate(game_record_list):
+        if index == 0 or index % 3 == 0:
             pass
-        elif v == "white" or v == "black" or v == "--":
+        elif value in ("white", "black", "--"):
             pass
         else:
-            game_record_list_with_only_moves.append(v)
+            game_record_list_with_only_moves.append(value)
             counter += 1
     return game_record_list_with_only_moves
 

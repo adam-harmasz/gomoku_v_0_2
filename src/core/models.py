@@ -1,17 +1,16 @@
+"""Models for the application"""
 import os
 import uuid
 from django.db import models
 from django.conf import settings
 from django.db.models.signals import post_save
-from PIL import Image
 from django.urls import reverse
+from PIL import Image
 
 from core.signals import create_gomoku_record_object, update_player_stats
 
-User = settings.AUTH_USER_MODEL
 
-
-def profile_image_file_path(instance, filename):
+def profile_image_file_path(filename):
     """Generate file path for new profile image"""
     ext = filename.split(".")[-1]
     filename = f"{uuid.uuid4()}.{ext}"
@@ -19,7 +18,7 @@ def profile_image_file_path(instance, filename):
     return os.path.join("uploads/accounts/", filename)
 
 
-def gomoku_record_image_file_path(instance, filename):
+def gomoku_record_image_file_path(filename):
     """Generate file path for new gomoku record file"""
     ext = filename.split(".")[-1]
     filename = f"{uuid.uuid4()}.{ext}"
@@ -30,7 +29,7 @@ def gomoku_record_image_file_path(instance, filename):
 class UserProfile(models.Model):
     """Class defining User object linked to profile by one-to-one"""
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=250, unique=True)
     picture = models.ImageField(
         default="default.jpg", upload_to=profile_image_file_path
@@ -38,9 +37,11 @@ class UserProfile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        """String representation of the object"""
         return self.user.username
 
     def save(self, force_insert=False, force_update=False, using=None):
+        """Overriding save method to set img attrs"""
         super().save()
         img = Image.open(self.picture.path)
 
@@ -50,6 +51,7 @@ class UserProfile(models.Model):
             img.save(self.picture.path)
 
     def get_absolute_url(self):
+        """Getting url for the object"""
         return reverse("accounts:profile-detail", args=[self.slug])
 
 
@@ -61,6 +63,7 @@ class Player(models.Model):
     loss = models.FloatField(default=0, blank=True, null=True)
 
     def __str__(self):
+        """String representation of the object"""
         return self.nickname
 
 
@@ -68,7 +71,7 @@ class GomokuRecord(models.Model):
     """Class defining gomoku record object"""
 
     profile = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="users_games"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="users_games"
     )
     game_record = models.TextField()
     game_date = models.DateTimeField()
@@ -85,19 +88,22 @@ class GomokuRecord(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        """Set ordering"""
         ordering = ("-created", "game_date")
 
     def __str__(self):
+        """String representation of the object"""
         return f"{self.black_player} - {self.white_player}"
 
     def get_absolute_url(self):
+        """Getting url for the object"""
         return reverse("gomoku:game-detail", args=[self.id])
 
 
 class GomokuRecordFile(models.Model):
     """Class defining GomokuRecordFiles objects"""
 
-    profile = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     game_record_file = models.FileField(
         default=None, null=True, blank=True, upload_to=gomoku_record_image_file_path
     )
@@ -105,6 +111,7 @@ class GomokuRecordFile(models.Model):
     status = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
+        """String representation of the object"""
         return f"game record owned by: {self.profile}"
 
 
