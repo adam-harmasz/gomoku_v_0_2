@@ -1,12 +1,10 @@
+"""API views for Gomoku app"""
 from rest_framework import viewsets
 from rest_framework import permissions
-from django.contrib.auth import get_user_model
 
+from core import models
 from .pagination import StandardResultsPagination
 from . import serializers
-from core import models
-
-User = get_user_model()
 
 
 class GomokuRecordViewset(viewsets.ModelViewSet):

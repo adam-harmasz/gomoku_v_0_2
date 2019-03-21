@@ -1,3 +1,4 @@
+"""Views handling GomokuRecord objects and displaying proper data to user"""
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
@@ -9,9 +10,6 @@ from core import models
 from . import forms
 
 
-User = get_user_model()
-
-
 class ExtractDataRedirectView(LoginRequiredMixin, View):
     """
     View which will unpack data from gomoku
@@ -19,13 +17,15 @@ class ExtractDataRedirectView(LoginRequiredMixin, View):
     """
 
     def get(self, request):
+        """GET method view"""
         form = forms.GomokuRecordForm()
         ctx = {"form": form}
         return render(request, "gomoku_app/gomoku_file_form.html", ctx)
 
     def post(self, request):
+        """POST method view"""
         form = forms.GomokuRecordForm(request.POST, request.FILES)
-        user = User.objects.get(username=self.request.user)
+        user = get_user_model().objects.get(username=self.request.user)
         if form.is_valid():
             file = form.cleaned_data["file"]
             models.GomokuRecordFile.objects.create(
@@ -43,14 +43,16 @@ class DownloadExtractDataRedirectView(LoginRequiredMixin, View):
     """
 
     def get(self, request):
+        """GET method view"""
         form = forms.GomokuRecordURLForm()
         ctx = {"form": form}
         return render(request, "gomoku_app/gomoku_file_form.html", ctx)
 
     def post(self, request):
+        """POST method view"""
         form = forms.GomokuRecordURLForm(request.POST)
         if form.is_valid():
-            user = User.objects.get(username=self.request.user)
+            user = get_user_model().objects.get(username=self.request.user)
             url = form.cleaned_data["url"]
             models.GomokuRecordFile.objects.create(url=url, profile=user, status="url")
             return HttpResponseRedirect("/gomoku/game_list")
@@ -66,13 +68,15 @@ class GameRecordListView(LoginRequiredMixin, ListView):
     paginate_by = 15
 
     def get_queryset(self):
+        """Get GomokuRecord objects owned by current user"""
         user = self.request.user
-        qs = models.GomokuRecord.objects.filter(profile=user)
-        if qs.exists():
-            return qs
+        obj = models.GomokuRecord.objects.filter(profile=user)
+        if obj.exists():
+            return obj
         return models.GomokuRecord.objects.all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
+        """Pass additional data to context"""
         ctx = super(GameRecordListView, self).get_context_data(**kwargs)
         ctx["download_form"] = forms.GomokuRecordURLForm()
         ctx["upload_form"] = forms.GomokuRecordForm()

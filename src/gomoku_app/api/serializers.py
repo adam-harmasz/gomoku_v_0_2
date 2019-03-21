@@ -1,9 +1,7 @@
+"""Serializers for Gomoku App API"""
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
 
 from core import models
-
-User = get_user_model()
 
 
 class GomokuRecordSerializer(serializers.ModelSerializer):
@@ -13,6 +11,7 @@ class GomokuRecordSerializer(serializers.ModelSerializer):
     white_player_nickname = serializers.SerializerMethodField()
 
     class Meta:
+        """Specifying model and fields for serializer"""
         model = models.GomokuRecord
         fields = (
             "id",
@@ -31,7 +30,9 @@ class GomokuRecordSerializer(serializers.ModelSerializer):
         read_only_fields = ("id",)
 
     def get_black_player_nickname(self, obj):
+        """Get black player nickname from obj for serializer field"""
         return obj.black_player.nickname
 
     def get_white_player_nickname(self, obj):
+        """Get white player nickname from obj for serializer field"""
         return obj.white_player.nickname

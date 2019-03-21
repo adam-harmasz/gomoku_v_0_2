@@ -1,3 +1,4 @@
+"""Forms for uploading/downloading game records"""
 from django import forms
 
 from core.utils import check_domain

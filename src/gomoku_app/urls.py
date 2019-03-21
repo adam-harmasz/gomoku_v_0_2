@@ -1,3 +1,4 @@
+"""Urls GomokuRecord related"""
 from django.urls import path
 
 from . import views
